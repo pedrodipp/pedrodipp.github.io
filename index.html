@@ -1,582 +1,1274 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>8 Meses | Pedro & Eloah</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{
-  --gold:#c9a96e;--gold-light:#e8d5b0;
-  --dark:#0e0c0a;--dark2:#1a1714;--dark3:#252018;
-  --purple:#8b5cf6;--purple-soft:#c4b5fd;
-  --muted:rgba(255,255,255,0.45);--soft:rgba(255,255,255,0.75);
-}
-html{scroll-behavior:smooth}
-body{background:var(--dark);color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden;min-height:100vh}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>8 Meses | Pedro & Eloah</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
 
-/* LOCK */
-#lockScreen{
-  position:fixed;inset:0;z-index:9999;background:var(--dark);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;
-  padding:2rem;
-}
-.lock-sub{font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold)}
-.lock-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,8vw,3rem);font-weight:300;color:var(--gold-light);letter-spacing:0.06em}
-.lock-dots{display:flex;gap:14px}
-.dot{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(201,169,110,0.35);background:transparent;transition:background .2s}
-.dot.filled{background:var(--gold);border-color:var(--gold)}
-.lock-keys{display:grid;grid-template-columns:repeat(3,72px);gap:10px;margin-top:0.5rem}
-.key{
-  height:60px;border-radius:14px;background:rgba(255,255,255,0.05);
-  border:0.5px solid rgba(255,255,255,0.1);color:#fff;font-size:1.2rem;
-  cursor:pointer;transition:background .15s,transform .1s;font-family:'Inter',sans-serif;
-}
-.key:active{background:rgba(255,255,255,0.15);transform:scale(0.94)}
-.key.del{font-size:0.75rem;color:var(--muted)}
-#lockError{font-size:0.78rem;color:#f87171;letter-spacing:0.1em;opacity:0;transition:opacity .3s;min-height:1.2em}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent
+        }
 
-/* CANVAS */
-#particles{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.5}
+        :root {
+            --gold: #c9a96e;
+            --gold-light: #e8d5b0;
+            --dark: #0e0c0a;
+            --dark2: #1a1714;
+            --dark3: #252018;
+            --purple: #8b5cf6;
+            --purple-soft: #c4b5fd;
+            --muted: rgba(255, 255, 255, 0.45);
+            --soft: rgba(255, 255, 255, 0.75);
+        }
 
-/* MAIN */
-#mainSite{display:none}
-.page-wrap{position:relative;z-index:1}
+        html {
+            scroll-behavior: smooth
+        }
 
-/* NAV */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:1rem 1.25rem;
-  display:flex;justify-content:space-between;align-items:center;
-  background:linear-gradient(to bottom,rgba(14,12,10,0.98),transparent);
-}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;letter-spacing:0.12em;color:var(--gold)}
-.nav-menu-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.4rem;padding:4px}
+        body {
+            background: var(--dark);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh
+        }
 
-/* DRAWER */
-#drawer{
-  position:fixed;top:0;right:-100%;width:72vw;max-width:280px;height:100vh;
-  z-index:200;background:var(--dark2);
-  border-left:0.5px solid rgba(201,169,110,0.15);
-  transition:right .3s ease;padding:5rem 1.5rem 2rem;
-  display:flex;flex-direction:column;gap:2rem;
-}
-#drawer.open{right:0}
-.drawer-link{font-size:0.8rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:0.5rem 0;border-bottom:0.5px solid rgba(255,255,255,0.06)}
-.drawer-link:hover{color:var(--gold-light)}
-#drawerOverlay{position:fixed;inset:0;z-index:150;background:rgba(0,0,0,0.6);display:none}
-#drawerOverlay.open{display:block}
+        /* LOCK */
+        #lockScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: var(--dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 2rem;
+        }
 
-/* HERO */
-.hero{
-  min-height:100vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;padding:6rem 1.5rem 4rem;
-}
-.hero-line{width:1px;height:60px;background:linear-gradient(to bottom,transparent,var(--gold),transparent);margin-bottom:2rem}
-.hero-date{font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem}
-.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,16vw,6rem);font-weight:300;line-height:1.05;color:#fff;margin-bottom:0.8rem}
-.hero-title em{font-style:italic;color:var(--gold-light)}
-.hero-sub{font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:2.5rem;padding:0 1rem;line-height:1.8}
-.counter-box{display:flex;align-items:center;gap:1rem;padding:1rem 1.5rem;border:0.5px solid rgba(201,169,110,0.22);border-radius:4px;background:rgba(201,169,110,0.04)}
-.counter-num{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:300;color:var(--gold-light);line-height:1;display:block}
-.counter-label{font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-align:center;display:block;margin-top:4px}
-.sep{width:1px;height:36px;background:rgba(201,169,110,0.2);flex-shrink:0}
-.hero-scroll{margin-top:3rem;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:6px}
-.scroll-line{width:1px;height:32px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s ease-in-out infinite}
-@keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+        .lock-sub {
+            font-size: 0.68rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold)
+        }
 
-/* SECTIONS */
-.section{padding:4rem 1.25rem;max-width:600px;margin:0 auto}
-.eyebrow{font-size:0.64rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
-.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,9vw,3rem);font-weight:300;line-height:1.15;margin-bottom:2rem;color:#fff}
-.divider{width:50px;height:1px;background:var(--gold);margin:0 auto;opacity:0.35}
+        .lock-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 8vw, 3rem);
+            font-weight: 300;
+            color: var(--gold-light);
+            letter-spacing: 0.06em
+        }
 
-/* GALERIA */
-.gallery-note{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:1.5rem}
-.gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px}
-.gallery-item{aspect-ratio:1;background:var(--dark3);position:relative;overflow:hidden;cursor:pointer}
-.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s,filter .3s;filter:brightness(0.82) saturate(0.9)}
-.gallery-item:active img{transform:scale(1.05);filter:brightness(1) saturate(1.1)}
-.g-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.75) 0%,transparent 55%);display:flex;align-items:flex-end;padding:10px}
-.g-legend{font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold-light)}
-.gallery-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;color:var(--muted);font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase}
+        .lock-dots {
+            display: flex;
+            gap: 14px
+        }
 
-/* CARTA */
-.carta-wrap{border-left:1.5px solid rgba(201,169,110,0.22);padding-left:1.25rem}
-.carta-text{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:300;line-height:1.9;color:var(--soft)}
-.carta-text strong{color:var(--gold-light)}
-.carta-sig{margin-top:2rem;font-family:'Cormorant Garamond',serif;font-size:0.95rem;font-style:italic;color:var(--gold);letter-spacing:0.04em}
+        .dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(201, 169, 110, 0.35);
+            background: transparent;
+            transition: background .2s
+        }
 
-/* RECADOS */
-.recados-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:1.5rem}
-.recado-card{padding:1.25rem;border:0.5px solid rgba(201,169,110,0.18);border-radius:10px;background:rgba(201,169,110,0.03)}
-.recado-num{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:rgba(201,169,110,0.18);line-height:1;margin-bottom:0.4rem}
-.recado-text{font-size:0.88rem;line-height:1.7;color:var(--soft)}
+        .dot.filled {
+            background: var(--gold);
+            border-color: var(--gold)
+        }
 
-/* BRIGA */
-.briga-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:1.5rem}
-.briga-btn{padding:11px 18px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.12);border-radius:100px;color:var(--soft);font-size:0.82rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;min-height:44px}
-.briga-btn:active{background:rgba(139,92,246,0.15);border-color:rgba(139,92,246,0.4);color:#fff}
-#brigaOutput{margin-top:1.5rem;padding:1.25rem 1.5rem;border-left:2px solid var(--purple);background:rgba(139,92,246,0.07);border-radius:0 8px 8px 0;font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;line-height:1.7;color:var(--purple-soft);opacity:0;transition:opacity .4s;display:none}
-#brigaOutput.show{opacity:1}
+        .lock-keys {
+            display: grid;
+            grid-template-columns: repeat(3, 72px);
+            gap: 10px;
+            margin-top: 0.5rem
+        }
 
-/* INTERATIVOS */
-.int-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:1.5rem}
-.int-card{padding:1.5rem;border:0.5px solid rgba(255,255,255,0.07);border-radius:12px;background:var(--dark2);text-align:center}
-.int-icon{font-size:1.8rem;margin-bottom:0.8rem;display:block}
-.int-label{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:0.8rem}
-.int-desc{font-size:0.82rem;color:var(--muted);margin-bottom:1rem;line-height:1.6}
-.int-btn{padding:11px 22px;background:transparent;border:0.5px solid rgba(201,169,110,0.32);border-radius:6px;color:var(--gold-light);font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:background .2s;font-family:'Inter',sans-serif;min-height:44px}
-.int-btn:active{background:rgba(201,169,110,0.12)}
-#jardimArea{position:relative;height:160px;border:0.5px solid rgba(201,169,110,0.12);border-radius:8px;margin-top:1rem;overflow:hidden;background:rgba(0,0,0,0.2)}
-.florzinha{position:absolute;bottom:10px;font-size:1.5rem;animation:growFlower 4s ease forwards;pointer-events:none}
-@keyframes growFlower{0%{opacity:0;transform:scale(0) translateY(20px)}20%{opacity:1;transform:scale(1) translateY(0)}80%{opacity:1;transform:scale(1) translateY(-25px)}100%{opacity:0;transform:scale(0.5) translateY(-55px)}}
-.termo-bar{width:100%;height:7px;background:rgba(255,255,255,0.08);border-radius:100px;margin:1rem 0;overflow:hidden}
-.termo-fill{height:100%;border-radius:100px;background:linear-gradient(to right,var(--purple),var(--gold));transition:width .8s cubic-bezier(.4,0,.2,1);width:15%}
-#termoFrase{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;color:var(--gold-light);min-height:2.2rem}
-#lembOutput{font-size:0.84rem;color:var(--gold-light);line-height:1.9;opacity:0;transition:opacity .4s;margin-top:0.8rem}
-#luzArea{position:relative;height:70px;margin-top:0.8rem;overflow:hidden}
+        .key {
+            height: 60px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background .15s, transform .1s;
+            font-family: 'Inter', sans-serif;
+        }
 
-/* UMBANDA */
-.umbanda-card{border:0.5px solid rgba(201,169,110,0.18);border-radius:12px;padding:1.75rem 1.25rem;background:rgba(201,169,110,0.03)}
-.umbanda-text{font-size:0.9rem;line-height:1.95;color:var(--soft);font-style:italic}
-.umbanda-sig{margin-top:1.25rem;font-family:'Cormorant Garamond',serif;font-size:0.95rem;color:var(--gold);letter-spacing:0.06em}
+        .key:active {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(0.94)
+        }
 
-/* FOOTER */
-footer{padding:4rem 1.5rem;text-align:center;border-top:0.5px solid rgba(255,255,255,0.06)}
-.footer-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,8vw,2.5rem);font-weight:300;color:var(--gold-light);margin-bottom:0.75rem}
-.footer-sub{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted)}
+        .key.del {
+            font-size: 0.75rem;
+            color: var(--muted)
+        }
 
-/* REVEAL */
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
+        #lockError {
+            font-size: 0.78rem;
+            color: #f87171;
+            letter-spacing: 0.1em;
+            opacity: 0;
+            transition: opacity .3s;
+            min-height: 1.2em
+        }
 
-/* DESKTOP */
-@media(min-width:768px){
-  .lock-keys{grid-template-columns:repeat(3,80px)}
-  .key{height:64px;font-size:1.3rem}
-  .gallery-grid{grid-template-columns:repeat(3,1fr)}
-  .int-grid{grid-template-columns:repeat(2,1fr)}
-  .recados-grid{grid-template-columns:repeat(2,1fr)}
-  .section{padding:6rem 2rem}
-  nav .nav-links-desktop{display:flex;gap:2rem}
-  .nav-menu-btn{display:none}
-}
-@media(min-width:1100px){
-  .gallery-grid{grid-template-columns:repeat(4,1fr)}
-  .int-grid{grid-template-columns:repeat(3,1fr)}
-}
-</style>
+        /* CANVAS */
+        #particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5
+        }
+
+        /* MAIN */
+        #mainSite {
+            display: none
+        }
+
+        .page-wrap {
+            position: relative;
+            z-index: 1
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(14, 12, 10, 0.98), transparent);
+        }
+
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            font-weight: 300;
+            letter-spacing: 0.12em;
+            color: var(--gold)
+        }
+
+        .nav-menu-btn {
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 1.4rem;
+            padding: 4px
+        }
+
+        /* DRAWER */
+        #drawer {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 72vw;
+            max-width: 280px;
+            height: 100vh;
+            z-index: 200;
+            background: var(--dark2);
+            border-left: 0.5px solid rgba(201, 169, 110, 0.15);
+            transition: right .3s ease;
+            padding: 5rem 1.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        #drawer.open {
+            right: 0
+        }
+
+        .drawer-link {
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 0.5rem 0;
+            border-bottom: 0.5px solid rgba(255, 255, 255, 0.06)
+        }
+
+        .drawer-link:hover {
+            color: var(--gold-light)
+        }
+
+        #drawerOverlay {
+            position: fixed;
+            inset: 0;
+            z-index: 150;
+            background: rgba(0, 0, 0, 0.6);
+            display: none
+        }
+
+        #drawerOverlay.open {
+            display: block
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 1.5rem 4rem;
+        }
+
+        .hero-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+            margin-bottom: 2rem
+        }
+
+        .hero-date {
+            font-size: 0.68rem;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1.2rem
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 16vw, 6rem);
+            font-weight: 300;
+            line-height: 1.05;
+            color: #fff;
+            margin-bottom: 0.8rem
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--gold-light)
+        }
+
+        .hero-sub {
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 2.5rem;
+            padding: 0 1rem;
+            line-height: 1.8
+        }
+
+        .counter-box {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border: 0.5px solid rgba(201, 169, 110, 0.22);
+            border-radius: 4px;
+            background: rgba(201, 169, 110, 0.04)
+        }
+
+        .counter-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.4rem;
+            font-weight: 300;
+            color: var(--gold-light);
+            line-height: 1;
+            display: block
+        }
+
+        .counter-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-align: center;
+            display: block;
+            margin-top: 4px
+        }
+
+        .sep {
+            width: 1px;
+            height: 36px;
+            background: rgba(201, 169, 110, 0.2);
+            flex-shrink: 0
+        }
+
+        .hero-scroll {
+            margin-top: 3rem;
+            font-size: 0.65rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 32px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: scrollPulse 2s ease-in-out infinite
+        }
+
+        @keyframes scrollPulse {
+
+            0%,
+            100% {
+                opacity: 0.3
+            }
+
+            50% {
+                opacity: 1
+            }
+        }
+
+        /* SECTIONS */
+        .section {
+            padding: 4rem 1.25rem;
+            max-width: 600px;
+            margin: 0 auto
+        }
+
+        .eyebrow {
+            font-size: 0.64rem;
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1rem
+        }
+
+        .sec-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 9vw, 3rem);
+            font-weight: 300;
+            line-height: 1.15;
+            margin-bottom: 2rem;
+            color: #fff
+        }
+
+        .divider {
+            width: 50px;
+            height: 1px;
+            background: var(--gold);
+            margin: 0 auto;
+            opacity: 0.35
+        }
+
+        /* GALERIA */
+        .gallery-note {
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-align: center;
+            margin-bottom: 1.5rem
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3px
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            background: var(--dark3);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .5s, filter .3s;
+            filter: brightness(0.82) saturate(0.9)
+        }
+
+        .gallery-item:active img {
+            transform: scale(1.05);
+            filter: brightness(1) saturate(1.1)
+        }
+
+        .g-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, transparent 55%);
+            display: flex;
+            align-items: flex-end;
+            padding: 10px
+        }
+
+        .g-legend {
+            font-size: 0.65rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--gold-light)
+        }
+
+        .gallery-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 6px;
+            color: var(--muted);
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase
+        }
+
+        /* CARTA */
+        .carta-wrap {
+            border-left: 1.5px solid rgba(201, 169, 110, 0.22);
+            padding-left: 1.25rem
+        }
+
+        .carta-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-weight: 300;
+            line-height: 1.9;
+            color: var(--soft)
+        }
+
+        .carta-text strong {
+            color: var(--gold-light)
+        }
+
+        .carta-sig {
+            margin-top: 2rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            font-style: italic;
+            color: var(--gold);
+            letter-spacing: 0.04em
+        }
+
+        /* RECADOS */
+        .recados-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 1.5rem
+        }
+
+        .recado-card {
+            padding: 1.25rem;
+            border: 0.5px solid rgba(201, 169, 110, 0.18);
+            border-radius: 10px;
+            background: rgba(201, 169, 110, 0.03)
+        }
+
+        .recado-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            color: rgba(201, 169, 110, 0.18);
+            line-height: 1;
+            margin-bottom: 0.4rem
+        }
+
+        .recado-text {
+            font-size: 0.88rem;
+            line-height: 1.7;
+            color: var(--soft)
+        }
+
+        /* BRIGA */
+        .briga-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 1.5rem
+        }
+
+        .briga-btn {
+            padding: 11px 18px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 0.5px solid rgba(255, 255, 255, 0.12);
+            border-radius: 100px;
+            color: var(--soft);
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all .2s;
+            font-family: 'Inter', sans-serif;
+            min-height: 44px
+        }
+
+        .briga-btn:active {
+            background: rgba(139, 92, 246, 0.15);
+            border-color: rgba(139, 92, 246, 0.4);
+            color: #fff
+        }
+
+        #brigaOutput {
+            margin-top: 1.5rem;
+            padding: 1.25rem 1.5rem;
+            border-left: 2px solid var(--purple);
+            background: rgba(139, 92, 246, 0.07);
+            border-radius: 0 8px 8px 0;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-style: italic;
+            line-height: 1.7;
+            color: var(--purple-soft);
+            opacity: 0;
+            transition: opacity .4s;
+            display: none
+        }
+
+        #brigaOutput.show {
+            opacity: 1
+        }
+
+        /* INTERATIVOS */
+        .int-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            margin-top: 1.5rem
+        }
+
+        .int-card {
+            padding: 1.5rem;
+            border: 0.5px solid rgba(255, 255, 255, 0.07);
+            border-radius: 12px;
+            background: var(--dark2);
+            text-align: center
+        }
+
+        .int-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+            display: block
+        }
+
+        .int-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.8rem
+        }
+
+        .int-desc {
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-bottom: 1rem;
+            line-height: 1.6
+        }
+
+        .int-btn {
+            padding: 11px 22px;
+            background: transparent;
+            border: 0.5px solid rgba(201, 169, 110, 0.32);
+            border-radius: 6px;
+            color: var(--gold-light);
+            font-size: 0.78rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background .2s;
+            font-family: 'Inter', sans-serif;
+            min-height: 44px
+        }
+
+        .int-btn:active {
+            background: rgba(201, 169, 110, 0.12)
+        }
+
+        #jardimArea {
+            position: relative;
+            height: 160px;
+            border: 0.5px solid rgba(201, 169, 110, 0.12);
+            border-radius: 8px;
+            margin-top: 1rem;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.2)
+        }
+
+        .florzinha {
+            position: absolute;
+            bottom: 10px;
+            font-size: 1.5rem;
+            animation: growFlower 4s ease forwards;
+            pointer-events: none
+        }
+
+        @keyframes growFlower {
+            0% {
+                opacity: 0;
+                transform: scale(0) translateY(20px)
+            }
+
+            20% {
+                opacity: 1;
+                transform: scale(1) translateY(0)
+            }
+
+            80% {
+                opacity: 1;
+                transform: scale(1) translateY(-25px)
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0.5) translateY(-55px)
+            }
+        }
+
+        .termo-bar {
+            width: 100%;
+            height: 7px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 100px;
+            margin: 1rem 0;
+            overflow: hidden
+        }
+
+        .termo-fill {
+            height: 100%;
+            border-radius: 100px;
+            background: linear-gradient(to right, var(--purple), var(--gold));
+            transition: width .8s cubic-bezier(.4, 0, .2, 1);
+            width: 15%
+        }
+
+        #termoFrase {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+            font-style: italic;
+            color: var(--gold-light);
+            min-height: 2.2rem
+        }
+
+        #lembOutput {
+            font-size: 0.84rem;
+            color: var(--gold-light);
+            line-height: 1.9;
+            opacity: 0;
+            transition: opacity .4s;
+            margin-top: 0.8rem
+        }
+
+        #luzArea {
+            position: relative;
+            height: 70px;
+            margin-top: 0.8rem;
+            overflow: hidden
+        }
+
+        /* UMBANDA */
+        .umbanda-card {
+            border: 0.5px solid rgba(201, 169, 110, 0.18);
+            border-radius: 12px;
+            padding: 1.75rem 1.25rem;
+            background: rgba(201, 169, 110, 0.03)
+        }
+
+        .umbanda-text {
+            font-size: 0.9rem;
+            line-height: 1.95;
+            color: var(--soft);
+            font-style: italic
+        }
+
+        .umbanda-sig {
+            margin-top: 1.25rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            color: var(--gold);
+            letter-spacing: 0.06em
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 4rem 1.5rem;
+            text-align: center;
+            border-top: 0.5px solid rgba(255, 255, 255, 0.06)
+        }
+
+        .footer-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.6rem, 8vw, 2.5rem);
+            font-weight: 300;
+            color: var(--gold-light);
+            margin-bottom: 0.75rem
+        }
+
+        .footer-sub {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted)
+        }
+
+        /* REVEAL */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity .7s ease, transform .7s ease
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0)
+        }
+
+        /* DESKTOP */
+        @media(min-width:768px) {
+            .lock-keys {
+                grid-template-columns: repeat(3, 80px)
+            }
+
+            .key {
+                height: 64px;
+                font-size: 1.3rem
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr)
+            }
+
+            .int-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .recados-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .section {
+                padding: 6rem 2rem
+            }
+
+            nav .nav-links-desktop {
+                display: flex;
+                gap: 2rem
+            }
+
+            .nav-menu-btn {
+                display: none
+            }
+        }
+
+        @media(min-width:1100px) {
+            .gallery-grid {
+                grid-template-columns: repeat(4, 1fr)
+            }
+
+            .int-grid {
+                grid-template-columns: repeat(3, 1fr)
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<div id="lockScreen">
-  <div class="lock-sub">acesso restrito</div>
-  <div class="lock-title">Pedro & Eloah</div>
-  <div class="lock-dots">
-    <div class="dot" id="d0"></div>
-    <div class="dot" id="d1"></div>
-    <div class="dot" id="d2"></div>
-    <div class="dot" id="d3"></div>
-  </div>
-  <div id="lockError"></div>
-  <div class="lock-keys">
-    <button class="key" onclick="addDigit('1')">1</button>
-    <button class="key" onclick="addDigit('2')">2</button>
-    <button class="key" onclick="addDigit('3')">3</button>
-    <button class="key" onclick="addDigit('4')">4</button>
-    <button class="key" onclick="addDigit('5')">5</button>
-    <button class="key" onclick="addDigit('6')">6</button>
-    <button class="key" onclick="addDigit('7')">7</button>
-    <button class="key" onclick="addDigit('8')">8</button>
-    <button class="key" onclick="addDigit('9')">9</button>
-    <button class="key" style="visibility:hidden"></button>
-    <button class="key" onclick="addDigit('0')">0</button>
-    <button class="key del" onclick="delDigit()">⌫</button>
-  </div>
-</div>
-
-<div id="mainSite">
-  <canvas id="particles"></canvas>
-
-  <div id="drawerOverlay" onclick="closeDrawer()"></div>
-  <div id="drawer">
-    <a class="drawer-link" href="#galeria" onclick="closeDrawer()">Galeria</a>
-    <a class="drawer-link" href="#carta" onclick="closeDrawer()">Carta</a>
-    <a class="drawer-link" href="#cantinho" onclick="closeDrawer()">Cantinho da briga</a>
-    <a class="drawer-link" href="#recados" onclick="closeDrawer()">Recados</a>
-    <a class="drawer-link" href="#umbanda" onclick="closeDrawer()">Cantinho Umbanda</a>
-  </div>
-
-  <nav>
-    <div class="nav-logo">P & E</div>
-    <div class="nav-links-desktop" style="display:none">
-      <a href="#galeria" style="font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.45);text-decoration:none">Galeria</a>
-      <a href="#carta" style="font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.45);text-decoration:none">Carta</a>
-      <a href="#cantinho" style="font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.45);text-decoration:none">Cantinho</a>
+    <div id="lockScreen">
+        <div class="lock-sub">acesso restrito</div>
+        <div class="lock-title">Pedro & Eloah</div>
+        <div class="lock-dots">
+            <div class="dot" id="d0"></div>
+            <div class="dot" id="d1"></div>
+            <div class="dot" id="d2"></div>
+            <div class="dot" id="d3"></div>
+        </div>
+        <div id="lockError"></div>
+        <div class="lock-keys">
+            <button class="key" onclick="addDigit('1')">1</button>
+            <button class="key" onclick="addDigit('2')">2</button>
+            <button class="key" onclick="addDigit('3')">3</button>
+            <button class="key" onclick="addDigit('4')">4</button>
+            <button class="key" onclick="addDigit('5')">5</button>
+            <button class="key" onclick="addDigit('6')">6</button>
+            <button class="key" onclick="addDigit('7')">7</button>
+            <button class="key" onclick="addDigit('8')">8</button>
+            <button class="key" onclick="addDigit('9')">9</button>
+            <button class="key" style="visibility:hidden"></button>
+            <button class="key" onclick="addDigit('0')">0</button>
+            <button class="key del" onclick="delDigit()">⌫</button>
+        </div>
     </div>
-    <button class="nav-menu-btn" onclick="openDrawer()" aria-label="Menu">☰</button>
-  </nav>
 
-  <div class="page-wrap">
+    <div id="mainSite">
+        <canvas id="particles"></canvas>
 
-    <section class="hero">
-      <div class="hero-line"></div>
-      <p class="hero-date">10 de outubro de 2025</p>
-      <h1 class="hero-title">Oito<br><em>meses</em><br>de nós</h1>
-      <p class="hero-sub">constância · axé · amor que transborda</p>
-      <div class="counter-box">
-        <div><div class="counter-num" id="mesesNum">—</div><div class="counter-label">meses</div></div>
-        <div class="sep"></div>
-        <div><div class="counter-num" id="diasNum">—</div><div class="counter-label">dias</div></div>
-        <div class="sep"></div>
-        <div><div class="counter-num" id="horasNum">—</div><div class="counter-label">horas</div></div>
-      </div>
-      <div class="hero-scroll"><span>scroll</span><div class="scroll-line"></div></div>
-    </section>
-
-    <div class="divider"></div>
-
-    <section id="galeria" class="section">
-      <p class="eyebrow reveal">nossa história em fotos</p>
-      <h2 class="sec-title reveal">Momentos<br>para sempre</h2>
-      <p class="gallery-note reveal">Fotos em ordem cronológica</p>
-      <div class="gallery-grid" id="galleryGrid"></div>
-    </section>
-
-    <div class="divider" style="margin-top:2rem"></div>
-
-    <section id="cantinho" class="section">
-      <p class="eyebrow reveal">para momentos difíceis</p>
-      <h2 class="sec-title reveal">Cantinho<br>da briga</h2>
-      <p class="reveal" style="font-size:0.85rem;color:var(--muted);line-height:1.7">Para quando a gente estiver estranho... escolhe um e lê com calma.</p>
-      <div class="briga-grid reveal">
-        <button class="briga-btn" data-msg="Você é meu mundo. Eu tô aqui por você, mesmo quando a gente briga.">Respira um pouco</button>
-        <button class="briga-btn" data-msg="Nada disso muda o que eu sinto. Eu continuo te amando igual... ou até mais.">Lembra disso</button>
-        <button class="briga-btn" data-msg="Você é a minha paz, mesmo quando é o meu caos. E eu sempre vou escolher te acalmar.">Só um lembrete</button>
-        <button class="briga-btn" data-msg="A gente é time. Juntos podemos resolver qualquer coisa!">Conversa comigo?</button>
-        <button class="briga-btn" data-msg="Que nos perdoemos 1000 vezes, mas que não fiquemos longe um do outro.">Um sorriso</button>
-      </div>
-      <div id="brigaOutput"></div>
-    </section>
-
-    <div class="divider"></div>
-
-    <section class="section">
-      <p class="eyebrow reveal">cantinhos especiais</p>
-      <h2 class="sec-title reveal">Nossa energia</h2>
-      <div class="int-grid">
-        <div class="int-card reveal">
-          <span class="int-icon">🌸</span>
-          <div class="int-label">Mini Jardim</div>
-          <p class="int-desc">Cada clique faz florescer...</p>
-          <button class="int-btn" id="btnFlor">Plantar uma flor</button>
-          <div id="jardimArea"></div>
+        <div id="drawerOverlay" onclick="closeDrawer()"></div>
+        <div id="drawer">
+            <a class="drawer-link" href="#galeria" onclick="closeDrawer()">Galeria</a>
+            <a class="drawer-link" href="#carta" onclick="closeDrawer()">Carta</a>
+            <a class="drawer-link" href="#cantinho" onclick="closeDrawer()">Cantinho da briga</a>
+            <a class="drawer-link" href="#recados" onclick="closeDrawer()">Recados</a>
+            <a class="drawer-link" href="#umbanda" onclick="closeDrawer()">Cantinho Umbanda</a>
         </div>
-        <div class="int-card reveal">
-          <span class="int-icon" id="coracaoIcon" style="cursor:pointer" onclick="clickCoracao()">❤️</span>
-          <div class="int-label">Termômetro do Amor</div>
-          <div class="termo-bar"><div class="termo-fill" id="termoFill"></div></div>
-          <div id="termoFrase">Nosso amor está aquecendo...</div>
+
+        <nav>
+            <div class="nav-logo">P & E</div>
+            <div class="nav-links-desktop" style="display:none">
+                <a href="#galeria"
+                    style="font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.45);text-decoration:none">Galeria</a>
+                <a href="#carta"
+                    style="font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.45);text-decoration:none">Carta</a>
+                <a href="#cantinho"
+                    style="font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.45);text-decoration:none">Cantinho</a>
+            </div>
+            <button class="nav-menu-btn" onclick="openDrawer()" aria-label="Menu">☰</button>
+        </nav>
+
+        <div class="page-wrap">
+
+            <section class="hero">
+                <div class="hero-line"></div>
+                <p class="hero-date">10 de outubro de 2025</p>
+                <h1 class="hero-title">Oito<br><em>meses</em><br>de nós</h1>
+                <p class="hero-sub">constância · axé · amor que transborda</p>
+                <div class="counter-box">
+                    <div>
+                        <div class="counter-num" id="mesesNum">—</div>
+                        <div class="counter-label">meses</div>
+                    </div>
+                    <div class="sep"></div>
+                    <div>
+                        <div class="counter-num" id="diasNum">—</div>
+                        <div class="counter-label">dias</div>
+                    </div>
+                    <div class="sep"></div>
+                    <div>
+                        <div class="counter-num" id="horasNum">—</div>
+                        <div class="counter-label">horas</div>
+                    </div>
+                </div>
+                <div class="hero-scroll"><span>scroll</span>
+                    <div class="scroll-line"></div>
+                </div>
+            </section>
+
+            <div class="divider"></div>
+
+            <section id="galeria" class="section">
+                <p class="eyebrow reveal">nossa história em fotos</p>
+                <h2 class="sec-title reveal">Momentos<br>para sempre</h2>
+                <p class="gallery-note reveal">Fotos em ordem cronológica</p>
+                <div class="gallery-grid" id="galleryGrid"></div>
+            </section>
+
+            <div class="divider" style="margin-top:2rem"></div>
+
+            <section id="cantinho" class="section">
+                <p class="eyebrow reveal">para momentos difíceis</p>
+                <h2 class="sec-title reveal">Cantinho<br>da briga</h2>
+                <p class="reveal" style="font-size:0.85rem;color:var(--muted);line-height:1.7">Para quando a gente
+                    estiver estranho... escolhe um e lê com calma.</p>
+                <div class="briga-grid reveal">
+                    <button class="briga-btn"
+                        data-msg="Você é meu mundo. Eu tô aqui por você, mesmo quando a gente briga.">Respira um
+                        pouco</button>
+                    <button class="briga-btn"
+                        data-msg="Nada disso muda o que eu sinto. Eu continuo te amando igual... ou até mais.">Lembra
+                        disso</button>
+                    <button class="briga-btn"
+                        data-msg="Você é a minha paz, mesmo quando é o meu caos. E eu sempre vou escolher te acalmar.">Só
+                        um lembrete</button>
+                    <button class="briga-btn"
+                        data-msg="A gente é time. Juntos podemos resolver qualquer coisa!">Conversa comigo?</button>
+                    <button class="briga-btn"
+                        data-msg="Que nos perdoemos 1000 vezes, mas que não fiquemos longe um do outro.">Um
+                        sorriso</button>
+                </div>
+                <div id="brigaOutput"></div>
+            </section>
+
+            <div class="divider"></div>
+
+            <section class="section">
+                <p class="eyebrow reveal">cantinhos especiais</p>
+                <h2 class="sec-title reveal">Nossa energia</h2>
+                <div class="int-grid">
+                    <div class="int-card reveal">
+                        <span class="int-icon">🌸</span>
+                        <div class="int-label">Mini Jardim</div>
+                        <p class="int-desc">Cada clique faz florescer...</p>
+                        <button class="int-btn" id="btnFlor">Plantar uma flor</button>
+                        <div id="jardimArea"></div>
+                    </div>
+                    <div class="int-card reveal">
+                        <span class="int-icon" id="coracaoIcon" style="cursor:pointer"
+                            onclick="clickCoracao()">❤️</span>
+                        <div class="int-label">Termômetro do Amor</div>
+                        <div class="termo-bar">
+                            <div class="termo-fill" id="termoFill"></div>
+                        </div>
+                        <div id="termoFrase">Nosso amor está aquecendo...</div>
+                    </div>
+                    <div class="int-card reveal">
+                        <span class="int-icon">😄</span>
+                        <div class="int-label">Risadinhas</div>
+                        <p class="int-desc">Quando estou com você, me sinto assim...</p>
+                        <button class="int-btn" id="btnRisada">Soltar risadinhas</button>
+                    </div>
+                    <div class="int-card reveal">
+                        <span class="int-icon">✨</span>
+                        <div class="int-label">Coisinhas que lembram você</div>
+                        <button class="int-btn" id="btnLemb">Descobrir</button>
+                        <div id="lembOutput"></div>
+                    </div>
+                    <div class="int-card reveal">
+                        <span class="int-icon">💩</span>
+                        <div class="int-label">Área do Coco</div>
+                        <p class="int-desc">Espalhe alegria e caos</p>
+                        <button class="int-btn" id="btnCoco">Apertar 💩</button>
+                    </div>
+                    <div class="int-card reveal">
+                        <span class="int-icon">💡</span>
+                        <div class="int-label">Luzinha da Saudade</div>
+                        <p class="int-desc">Mesmo longe, sob o mesmo céu</p>
+                        <button class="int-btn" id="btnLuz">Acender</button>
+                        <div id="luzArea"></div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="divider"></div>
+
+            <section id="umbanda" class="section">
+                <p class="eyebrow reveal">espiritualidade</p>
+                <h2 class="sec-title reveal">Cantinho<br>Umbanda</h2>
+                <div class="umbanda-card reveal">
+                    <p class="umbanda-text">Que Papai Oxalá, nossos guias e todos os Orixás nos abençoem com amor,
+                        proteção e paciência. Que sejamos blindados de toda a inveja e mal olhado. Que nosso amor
+                        aumente cada dia mais, assim como Oxum amou Oxóssi.<br><br>Que Oxalá nos traga paz, Oxóssi nos
+                        permita batalhar pela vida juntos, Ogum nos dê força, Xangô afaste todo o mal olhado, Iansã
+                        nunca nos deixe estagnados, Iemanjá traga o amor com a imensidão dos oceanos, Oxum nos purifique
+                        com suas águas, Nanã nos traga sabedoria e Omolú nos traga a cura de todas as feridas da alma.
+                    </p>
+                    <div class="umbanda-sig">Com amor e axé — Pedro 🏹</div>
+                </div>
+            </section>
+
+            <div class="divider"></div>
+
+            <section id="carta" class="section">
+                <p class="eyebrow reveal">de coração aberto</p>
+                <h2 class="sec-title reveal">Minha carta<br>para você</h2>
+                <div class="carta-wrap reveal">
+                    <p class="carta-text">
+                        Como o tempo voa, né? <strong>8 meses</strong> juntos...<br><br>
+
+                        O tempo passou tão depressa, foi como uma cachoeira de coisas caindo sobre nós.<br><br>
+
+                        A distância é uma luta diária contra as inseguranças, os medos e a saudade. Algumas partes
+                        desses 8 meses não foram fáceis, muitos momentos eu queria muito que você estivesse aqui, da
+                        mesma forma que acho que você também precisou de mim aí em alguns momentos.<br><br>
+
+                        Mas, mesmo com todas as dificuldades, nunca deixei de ter certeza do que sinto por você. Cada
+                        dia que passa, nós dois nos mostramos presentes na vida um do outro, de forma que mesmo estando
+                        longe, fazemos nos sentir perto! A distância não é ruim, é péssima... mas vale a pena quando eu
+                        lembro quem está atrás da tela.<br><br>
+
+                        Nesses 8 meses, colecionamos memórias, risadas, conversas profundas sobre espiritualidade e
+                        sobre nós, e momentos que guardarei para sempre no coração. Você se tornou uma das pessoas mais
+                        importantes da minha vida, alguém com quem quero compartilhar minhas conquistas, meus medos,
+                        meus sonhos e meu futuro.<br><br>
+
+                        Obrigado por estar ao meu lado, por me apoiar nas minhas escolhas, por me ouvir e por escolher
+                        ficar, mesmo quando
+                        as coisas ficam difíceis. Sou muito grato por cada momento que vivemos até aqui e ainda mais
+                        ansioso por tudo o que ainda vamos viver juntos.<br><br>
+
+                        Feliz 8 meses, meu amor. Que este seja apenas mais um capítulo da nossa história, porque eu
+                        quero continuar escrevendo muitas páginas ao seu lado.<br><br>
+
+                        <strong>Eu te amo muito muito muito muito muito. E eu amo amar você.</strong>
+                    </p>
+                    <div class="carta-sig">— Cabeça de Melão 🍈<br>para minha moranguinho, minha melhor amiga, minha
+                        confidente, minha escolha
+                        diária.</div>
+                </div>
+            </section>
+
+            <div class="divider"></div>
+
+            <section id="recados" class="section">
+                <p class="eyebrow reveal">sempre que precisar lembrar</p>
+                <h2 class="sec-title reveal">Recados do<br>meu coração</h2>
+                <div class="recados-grid">
+                    <div class="recado-card reveal">
+                        <div class="recado-num">01</div>
+                        <div class="recado-text">Nunca deixe ninguém te diminuir. Você é incrível.</div>
+                    </div>
+                    <div class="recado-card reveal">
+                        <div class="recado-num">02</div>
+                        <div class="recado-text">Você não é uma filha ruim, uma namorada ruim. Você é humana. Se permita
+                            errar sem se julgar.</div>
+                    </div>
+                    <div class="recado-card reveal">
+                        <div class="recado-num">03</div>
+                        <div class="recado-text">Você é especial e única. Nunca deixe ninguém te dizer o contrário.
+                        </div>
+                    </div>
+                    <div class="recado-card reveal">
+                        <div class="recado-num">04</div>
+                        <div class="recado-text">Sua espiritualidade é gigante e preciosa. Confie mais nela!</div>
+                    </div>
+                    <div class="recado-card reveal">
+                        <div class="recado-num">05</div>
+                        <div class="recado-text">Você é uma estrela que brilha muito. Nunca deixe ninguém ofuscar você.
+                        </div>
+                    </div>
+                    <div class="recado-card reveal">
+                        <div class="recado-num">06</div>
+                        <div class="recado-text">Sempre vou torcer por você, independente do que seja.</div>
+                    </div>
+                </div>
+            </section>
+
+            <footer>
+                <div class="footer-title">Pedro & Eloah</div>
+                <p class="footer-sub">10.10.2025 — para sempre</p>
+            </footer>
+
         </div>
-        <div class="int-card reveal">
-          <span class="int-icon">😄</span>
-          <div class="int-label">Risadinhas</div>
-          <p class="int-desc">Quando estou com você, me sinto assim...</p>
-          <button class="int-btn" id="btnRisada">Soltar risadinhas</button>
-        </div>
-        <div class="int-card reveal">
-          <span class="int-icon">✨</span>
-          <div class="int-label">Coisinhas que lembram você</div>
-          <button class="int-btn" id="btnLemb">Descobrir</button>
-          <div id="lembOutput"></div>
-        </div>
-        <div class="int-card reveal">
-          <span class="int-icon">💩</span>
-          <div class="int-label">Área do Coco</div>
-          <p class="int-desc">Espalhe alegria e caos</p>
-          <button class="int-btn" id="btnCoco">Apertar 💩</button>
-        </div>
-        <div class="int-card reveal">
-          <span class="int-icon">💡</span>
-          <div class="int-label">Luzinha da Saudade</div>
-          <p class="int-desc">Mesmo longe, sob o mesmo céu</p>
-          <button class="int-btn" id="btnLuz">Acender</button>
-          <div id="luzArea"></div>
-        </div>
-      </div>
-    </section>
+    </div>
 
-    <div class="divider"></div>
+    <script>
+        let pin = '';
+        const SENHA = '1010';
 
-    <section id="umbanda" class="section">
-      <p class="eyebrow reveal">espiritualidade</p>
-      <h2 class="sec-title reveal">Cantinho<br>Umbanda</h2>
-      <div class="umbanda-card reveal">
-        <p class="umbanda-text">Que Papai Oxalá, nossos guias e todos os Orixás nos abençoem com amor, proteção e paciência. Que sejamos blindados de toda a inveja e mal olhado. Que nosso amor aumente cada dia mais, assim como Oxum amou Oxóssi.<br><br>Que Oxalá nos traga paz, Oxóssi nos permita batalhar pela vida juntos, Ogum nos dê força, Xangô afaste todo o mal olhado, Iansã nunca nos deixe estagnados, Iemanjá traga o amor com a imensidão dos oceanos, Oxum nos purifique com suas águas, Nanã nos traga sabedoria e Omolú nos traga a cura de todas as feridas da alma.</p>
-        <div class="umbanda-sig">Com amor e axé — Pedro 🏹</div>
-      </div>
-    </section>
+        function addDigit(d) {
+            if (pin.length >= 4) return;
+            pin += d; updateDots();
+            if (pin.length === 4) setTimeout(checkPin, 180);
+        }
+        function delDigit() { pin = pin.slice(0, -1); updateDots() }
+        function updateDots() {
+            for (let i = 0; i < 4; i++)document.getElementById('d' + i).classList.toggle('filled', i < pin.length);
+        }
+        function checkPin() {
+            const err = document.getElementById('lockError');
+            if (pin === SENHA) {
+                const ls = document.getElementById('lockScreen');
+                ls.style.transition = 'opacity .5s'; ls.style.opacity = '0';
+                setTimeout(() => { ls.style.display = 'none'; document.getElementById('mainSite').style.display = 'block'; initSite() }, 500);
+            } else {
+                err.textContent = 'senha incorreta'; err.style.opacity = '1';
+                setTimeout(() => { err.style.opacity = '0'; pin = ''; updateDots() }, 1400);
+            }
+        }
 
-    <div class="divider"></div>
+        function openDrawer() {
+            document.getElementById('drawer').classList.add('open');
+            document.getElementById('drawerOverlay').classList.add('open');
+        }
+        function closeDrawer() {
+            document.getElementById('drawer').classList.remove('open');
+            document.getElementById('drawerOverlay').classList.remove('open');
+        }
 
-    <section id="carta" class="section">
-      <p class="eyebrow reveal">de coração aberto</p>
-      <h2 class="sec-title reveal">Minha carta<br>para você</h2>
-      <div class="carta-wrap reveal">
-        <p class="carta-text">
-          E aqui estamos, Bileia... <strong>8 meses</strong> de trocas de amor, carinho, energia, momentos, ideias e sonhos.<br><br>
-          8 meses que nossas energias se entrelaçam, nossa alma se funde, nosso corpo se une e nosso espírito sorri alegremente pela companhia um do outro.<br><br>
-          Passamos por vários momentos juntos — a maioria muito bons, alguns difíceis — mas independente de qualquer coisa, escolhemos ficar. E aqui reforço meu compromisso: o de ficar quantas vezes fossem necessárias para te ter comigo para sempre.<br><br>
-          Você me mostrou que a vida pode ser repleta de sorrisos quando vivemos mais leve. Me mostrou que sou capaz, que sou amado, que tenho um lar... que é no seu coração.<br><br>
-          Eu te imagino no futuro: indo te buscar na faculdade, fazendo compras do mês juntos, rindo da simplicidade da vida, indo juntos para o terreiro, viajando e vivendo novas experiências. Tudo isso parece real quando me imagino ao seu lado.<br><br>
-          Você torna tudo mais especial... até gestos simples como dividir uma garrafa de água, dar o resto do prato para mim, ligar o ventilador de noite. Esses gestos de amor se tornam magia dentro do meu coração.<br><br>
-          Obrigado por me fazer sonhar mesmo acordado todos os dias, por me apoiar até nas pequenas coisas, por me incentivar a ser sempre melhor — não só por você, mas por mim também.<br><br>
-          <strong>Eu te amo muito muito muito. E eu amo amar você.</strong>
-        </p>
-        <div class="carta-sig">— Bilu 👽<br>para Bileia, minha melhor amiga, minha confidente, minha escolha diária.</div>
-      </div>
-    </section>
+        function initSite() {
+            initParticles();
+            updateCounter(); setInterval(updateCounter, 1000);
+            buildGallery();
+            initReveal();
+            initInterativos();
+        }
 
-    <div class="divider"></div>
+        function initParticles() {
+            const c = document.getElementById('particles');
+            const ctx = c.getContext('2d');
+            function resize() { c.width = window.innerWidth; c.height = window.innerHeight }
+            resize(); window.addEventListener('resize', resize);
+            const stars = Array.from({ length: 100 }, () => ({
+                x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
+                r: Math.random() * 1.1 + 0.3, a: Math.random(), da: Math.random() * 0.004 + 0.002,
+                vx: (Math.random() - .5) * 0.06, vy: (Math.random() - .5) * 0.06
+            }));
+            function draw() {
+                ctx.clearRect(0, 0, c.width, c.height);
+                stars.forEach(s => {
+                    s.a += s.da; if (s.a > 1 || s.a < 0) s.da *= -1;
+                    s.x += s.vx; s.y += s.vy;
+                    if (s.x < 0) s.x = c.width; if (s.x > c.width) s.x = 0;
+                    if (s.y < 0) s.y = c.height; if (s.y > c.height) s.y = 0;
+                    ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(201,169,110,${s.a * 0.55})`; ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
 
-    <section id="recados" class="section">
-      <p class="eyebrow reveal">sempre que precisar lembrar</p>
-      <h2 class="sec-title reveal">Recados do<br>meu coração</h2>
-      <div class="recados-grid">
-        <div class="recado-card reveal"><div class="recado-num">01</div><div class="recado-text">Nunca deixe ninguém te diminuir. Você é incrível.</div></div>
-        <div class="recado-card reveal"><div class="recado-num">02</div><div class="recado-text">Você não é uma filha ruim, uma namorada ruim. Você é humana. Se permita errar sem se julgar.</div></div>
-        <div class="recado-card reveal"><div class="recado-num">03</div><div class="recado-text">Você é especial e única. Nunca deixe ninguém te dizer o contrário.</div></div>
-        <div class="recado-card reveal"><div class="recado-num">04</div><div class="recado-text">Sua espiritualidade é gigante e preciosa.</div></div>
-        <div class="recado-card reveal"><div class="recado-num">05</div><div class="recado-text">Você é uma estrela que brilha muito. Nunca deixe ninguém ofuscar você.</div></div>
-        <div class="recado-card reveal"><div class="recado-num">06</div><div class="recado-text">Sempre vou torcer por você, independente do que seja.</div></div>
-        <div class="recado-card reveal"><div class="recado-num">07</div><div class="recado-text">Você é forte. Pode vencer qualquer luta. Nunca desista.</div></div>
-      </div>
-    </section>
+        function updateCounter() {
+            const start = new Date('2025-10-10T00:00:00');
+            const now = new Date();
+            let y = now.getFullYear() - start.getFullYear();
+            let m = now.getMonth() - start.getMonth();
+            let d = now.getDate() - start.getDate();
+            if (d < 0) { const pm = new Date(now.getFullYear(), now.getMonth(), 0); d += pm.getDate(); m--; }
+            if (m < 0) { m += 12; y--; }
+            document.getElementById('mesesNum').textContent = y * 12 + m;
+            document.getElementById('diasNum').textContent = d;
+            document.getElementById('horasNum').textContent = now.getHours();
+        }
 
-    <footer>
-      <div class="footer-title">Pedro & Eloah</div>
-      <p class="footer-sub">10.10.2025 — para sempre</p>
-    </footer>
+        // Para adicionar suas fotos, substitua os src abaixo:
+        // Ex: {src:'./nos1.jpg', leg:'Primeira conversa 💬'}
+        const fotos = [
+            { src: './primeiraconversa.jpg', leg: 'Primeira conversa 💬' },
+            { src: './nos1.jpg', leg: 'Primeiro encontro 😂' },
+            { src: './nos2.jpg', leg: 'Troca de olhares 👀' },
+            { src: './aneis.jpg', leg: 'Oficialmente namorados 💍' },
+            { src: './nos3.jpg', leg: 'Arrumando os belos 🪮' },
+            { src: './nos5.jpg', leg: 'Seu aniversário 🥳' },
+            { src: './nos6.jpg', leg: 'Batatinha 🍟' },
+            { src: './nos7.jpg', leg: 'Cafézinho da manhã 🍳' },
+            { src: './nos8.jpg', leg: 'Esbaforidos 😮‍💨' },
+            { src: './nos9.jpg', leg: 'Samara 💇‍♂️' },
+            { src: './nos10.jpg', leg: 'Museu da Muma 🧟' },
+            { src: './nos17.jpg', leg: 'Na muma de novo 🧟' },
+            { src: './nos11.jpg', leg: 'Arrumadinhos 😍' },
+            { src: './nos12.jpg', leg: 'Ano novo 🎆' },
+            { src: './nos14.jpg', leg: 'Nós plenos 😅' },
+            { src: './nos15.jpg', leg: 'Pézinhos unidos 🦶' },
+            { src: './nos16.jpg', leg: 'Casal natalino 🎅' },
+            { src: './nos18.jpg', leg: 'Sorriso sem preço 😁' },
+            { src: './nos19.jpg', leg: 'Aniversário do Pê 🥳' },
+            { src: './1bolo.jpg', leg: 'Primeiro pedaço de bolo 🎂' },
+            { src: './emi.png', leg: 'Emissário 🌑' },
+            { src: './sorrisaolindo.png', leg: 'Sorriso sem preço #2 😁' },
+            { src: './peixe.png', leg: 'Tilapios 🐟' },
+            { src: './pizzaria.jpg', leg: 'Big Pizza 🍕' },
+            { src: './dino.png', leg: 'Dino pintado 🦕' },
+            { src: './macumba.png', leg: 'Sorriso sem preço' },
+            { src: './ping.png', leg: 'Pinguim 🐧' }
+        ];
 
-  </div>
-</div>
+        function buildGallery() {
+            const g = document.getElementById('galleryGrid');
+            fotos.forEach((f, i) => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                if (f.src) {
+                    item.innerHTML = `<img src="${f.src}" alt="${f.leg}" loading="lazy"><div class="g-overlay"><span class="g-legend">${f.leg}</span></div>`;
+                } else {
+                    item.innerHTML = `<div class="gallery-placeholder"><span style="font-size:1.2rem;opacity:0.25">📷</span><span>foto ${i + 1}</span></div><div class="g-overlay"><span class="g-legend">${f.leg}</span></div>`;
+                }
+                g.appendChild(item);
+            });
+        }
 
-<script>
-let pin='';
-const SENHA='1010';
+        function initReveal() {
+            const obs = new IntersectionObserver(entries => {
+                entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        }
 
-function addDigit(d){
-  if(pin.length>=4)return;
-  pin+=d;updateDots();
-  if(pin.length===4)setTimeout(checkPin,180);
-}
-function delDigit(){pin=pin.slice(0,-1);updateDots()}
-function updateDots(){
-  for(let i=0;i<4;i++)document.getElementById('d'+i).classList.toggle('filled',i<pin.length);
-}
-function checkPin(){
-  const err=document.getElementById('lockError');
-  if(pin===SENHA){
-    const ls=document.getElementById('lockScreen');
-    ls.style.transition='opacity .5s';ls.style.opacity='0';
-    setTimeout(()=>{ls.style.display='none';document.getElementById('mainSite').style.display='block';initSite()},500);
-  } else {
-    err.textContent='senha incorreta';err.style.opacity='1';
-    setTimeout(()=>{err.style.opacity='0';pin='';updateDots()},1400);
-  }
-}
+        function initInterativos() {
+            document.querySelectorAll('.briga-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const out = document.getElementById('brigaOutput');
+                    out.textContent = btn.dataset.msg; out.style.display = 'block';
+                    setTimeout(() => out.classList.add('show'), 10);
+                });
+            });
 
-function openDrawer(){
-  document.getElementById('drawer').classList.add('open');
-  document.getElementById('drawerOverlay').classList.add('open');
-}
-function closeDrawer(){
-  document.getElementById('drawer').classList.remove('open');
-  document.getElementById('drawerOverlay').classList.remove('open');
-}
+            const flores = ['🌸', '🌻', '🌼', '🌷', '🌹', '🪷'];
+            document.getElementById('btnFlor').addEventListener('click', () => {
+                const a = document.getElementById('jardimArea');
+                const f = document.createElement('div');
+                f.className = 'florzinha';
+                f.textContent = flores[Math.floor(Math.random() * flores.length)];
+                f.style.left = Math.random() * 82 + '%';
+                a.appendChild(f); setTimeout(() => f.remove(), 4000);
+            });
 
-function initSite(){
-  initParticles();
-  updateCounter();setInterval(updateCounter,1000);
-  buildGallery();
-  initReveal();
-  initInterativos();
-}
+            const frases = ['Nosso amor está aquecendo...', 'Eu te amo muito 💘', 'Cada batida guarda as letras do seu nome 💖', 'Constante como o tempo, forte como o sol ☀️', 'Eu te amo como o infinito do universo ♾️', 'Transbordando como o oceano de amor que sinto por você 🌊'];
+            const pcts = ['12%', '30%', '50%', '68%', '84%', '100%'];
+            let nivel = 0;
+            window.clickCoracao = function () {
+                nivel = (nivel + 1) % frases.length;
+                document.getElementById('termoFrase').textContent = frases[nivel];
+                document.getElementById('termoFill').style.width = pcts[nivel];
+                const ic = document.getElementById('coracaoIcon');
+                ic.style.transform = 'scale(1.4)'; setTimeout(() => ic.style.transform = 'scale(1)', 300);
+            };
 
-function initParticles(){
-  const c=document.getElementById('particles');
-  const ctx=c.getContext('2d');
-  function resize(){c.width=window.innerWidth;c.height=window.innerHeight}
-  resize();window.addEventListener('resize',resize);
-  const stars=Array.from({length:100},()=>({
-    x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,
-    r:Math.random()*1.1+0.3,a:Math.random(),da:Math.random()*0.004+0.002,
-    vx:(Math.random()-.5)*0.06,vy:(Math.random()-.5)*0.06
-  }));
-  function draw(){
-    ctx.clearRect(0,0,c.width,c.height);
-    stars.forEach(s=>{
-      s.a+=s.da;if(s.a>1||s.a<0)s.da*=-1;
-      s.x+=s.vx;s.y+=s.vy;
-      if(s.x<0)s.x=c.width;if(s.x>c.width)s.x=0;
-      if(s.y<0)s.y=c.height;if(s.y>c.height)s.y=0;
-      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(201,169,110,${s.a*0.55})`;ctx.fill();
-    });
-    requestAnimationFrame(draw);
-  }
-  draw();
-}
+            const style = document.createElement('style');
+            style.textContent = `@keyframes floatUp{0%{opacity:0;transform:translateY(0) scale(0.6)}20%{opacity:1}100%{opacity:0;transform:translateY(-75vh) scale(1.2)}}@keyframes piscar{0%,100%{opacity:0.12}50%{opacity:1}}`;
+            document.head.appendChild(style);
 
-function updateCounter(){
-  const start=new Date('2025-10-10T00:00:00');
-  const now=new Date();
-  let y=now.getFullYear()-start.getFullYear();
-  let m=now.getMonth()-start.getMonth();
-  let d=now.getDate()-start.getDate();
-  if(d<0){const pm=new Date(now.getFullYear(),now.getMonth(),0);d+=pm.getDate();m--;}
-  if(m<0){m+=12;y--;}
-  document.getElementById('mesesNum').textContent=y*12+m;
-  document.getElementById('diasNum').textContent=d;
-  document.getElementById('horasNum').textContent=now.getHours();
-}
+            const somRisada = new Audio('./risadas.mp3');
+            somRisada.volume = 0.6;
+            document.getElementById('btnRisada').addEventListener('click', () => {
+                somRisada.currentTime = 0;
+                somRisada.play();
+                for (let i = 0; i < 14; i++) {
+                    const r = document.createElement('div');
+                    r.style.cssText = `position:fixed;font-size:1.3rem;pointer-events:none;z-index:9999;left:${Math.random() * 88}vw;bottom:0;animation:floatUp 2.2s ease-out ${Math.random() * 0.4}s forwards`;
+                    r.textContent = ['😆', '😂', '🤣', '😄'][Math.floor(Math.random() * 4)];
+                    document.body.appendChild(r); setTimeout(() => r.remove(), 2800);
+                }
+            });
 
-// Para adicionar suas fotos, substitua os src abaixo:
-// Ex: {src:'./assets/fotos/nos1.jpg', leg:'Primeira conversa 💬'}
-const fotos=[
-  {src:'./assets/fotos/primeiraconversa.jpg', leg:'Primeira conversa 💬'},
-  {src:'./assets/fotos/nos1.jpg', leg:'Primeiro encontro 😂'},
-  {src:'./assets/fotos/nos2.jpg', leg:'Troca de olhares 👀'},
-  {src:'./assets/fotos/aneis.jpg', leg:'Oficialmente namorados 💍'},
-  {src:'./assets/fotos/nos3.jpg', leg:'Arrumando os belos 🪮'},
-  {src:'./assets/fotos/nos5.jpg', leg:'Seu aniversário 🥳'},
-  {src:'./assets/fotos/nos6.jpg', leg:'Batatinha 🍟'},
-  {src:'./assets/fotos/nos7.jpg', leg:'Cafézinho da manhã 🍳'},
-  {src:'./assets/fotos/nos8.jpg', leg:'Esbaforidos 😮‍💨'},
-  {src:'./assets/fotos/nos9.jpg', leg:'Samara 💇‍♂️'},
-  {src:'./assets/fotos/nos10.jpg', leg:'Museu da Muma 🧟'},
-  {src:'./assets/fotos/nos17.jpg', leg:'Na muma de novo 🧟'},
-  {src:'./assets/fotos/nos11.jpg', leg:'Arrumadinhos 😍'},
-  {src:'./assets/fotos/nos12.jpg', leg:'Ano novo 🎆'},
-  {src:'./assets/fotos/nos14.jpg', leg:'Nós plenos 😅'},
-  {src:'./assets/fotos/nos15.jpg', leg:'Pézinhos unidos 🦶'},
-  {src:'./assets/fotos/nos16.jpg', leg:'Casal natalino 🎅'},
-  {src:'./assets/fotos/nos18.jpg', leg:'Sorriso sem preço 😁'},
-  {src:'./assets/fotos/nos19.jpg', leg:'Aniversário do Pê 🥳'},
-  {src:'./assets/fotos/1bolo.jpg', leg:'Primeiro pedaço de bolo 🎂'},
-  {src:'./assets/fotos/emi.png', leg:'Emissário 🌑'},
-  {src:'./assets/fotos/sorrisaolindo.png', leg:'Sorriso sem preço #2 😁'},
-  {src:'./assets/fotos/peixe.png', leg:'Tilapios 🐟'},
-  {src:'./assets/fotos/pizzaria.jpg', leg:'Big Pizza 🍕'},
-  {src:'./assets/fotos/dino.png', leg:'Dino pintado 🦕'},
-  {src:'./assets/fotos/macumba.png', leg:'Sorriso sem preço'},
-  {src:'./assets/fotos/ping.png', leg:'Pinguim 🐧'}
-];
+            const lembs = ['🍟 Comer as batatas antes do hambúrguer', '☕ Cafézinho para fazer coco', '🎶 Gosto musical abrangente', '🌧️ Medinho de chuva forte', '🌫️ Peidinhos e arrotos', '🍫 Ser formiguinha', '💤 O pijaminha da Minnie', '🕯️ Você de branco arrumando seu pano de cabeça', '🔪 Cozinha maravilhosamente bem', '👵 Humor de velha', '🔥 Ser sapequinha', '🤚 Carinhos de mão', '🪮 Seu jeitinho de arrumar meu cabelo', '🥒 Sneveral Spleneral Plate', '🏄‍♀️ Dias de praia'];
+            document.getElementById('btnLemb').addEventListener('click', () => {
+                const out = document.getElementById('lembOutput');
+                const shuffled = [...lembs].sort(() => Math.random() - .5).slice(0, 5);
+                out.innerHTML = shuffled.map(l => `<div style="padding:2px 0">${l}</div>`).join('');
+                out.style.opacity = '1';
+            });
 
-function buildGallery(){
-  const g=document.getElementById('galleryGrid');
-  fotos.forEach((f,i)=>{
-    const item=document.createElement('div');
-    item.className='gallery-item';
-    if(f.src){
-      item.innerHTML=`<img src="${f.src}" alt="${f.leg}" loading="lazy"><div class="g-overlay"><span class="g-legend">${f.leg}</span></div>`;
-    } else {
-      item.innerHTML=`<div class="gallery-placeholder"><span style="font-size:1.2rem;opacity:0.25">📷</span><span>foto ${i+1}</span></div><div class="g-overlay"><span class="g-legend">${f.leg}</span></div>`;
-    }
-    g.appendChild(item);
-  });
-}
+            document.getElementById('btnCoco').addEventListener('click', () => {
+                const somPeido = new Audio('./peido.mp3');
+                somPeido.play();
+                for (let i = 0; i < 40; i++) {
+                    const c = document.createElement('div');
+                    c.style.cssText = `position:fixed;z-index:9999;pointer-events:none;left:${Math.random() * 100}vw;top:-40px;font-size:${Math.random() * 25 + 14}px;transition:transform 3s linear,opacity 3s ease-out`;
+                    c.textContent = '💩'; document.body.appendChild(c);
+                    requestAnimationFrame(() => {
+                        c.style.transform = `translate(${(Math.random() - .5) * 160}px,${window.innerHeight + 80}px) rotate(${Math.random() * 720}deg)`;
+                        c.style.opacity = '0';
+                    });
+                    setTimeout(() => c.remove(), 3100);
+                }
+            });
 
-function initReveal(){
-  const obs=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
-  },{threshold:0.1});
-  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-}
-
-function initInterativos(){
-  document.querySelectorAll('.briga-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const out=document.getElementById('brigaOutput');
-      out.textContent=btn.dataset.msg;out.style.display='block';
-      setTimeout(()=>out.classList.add('show'),10);
-    });
-  });
-
-  const flores=['🌸','🌻','🌼','🌷','🌹','🪷'];
-  document.getElementById('btnFlor').addEventListener('click',()=>{
-    const a=document.getElementById('jardimArea');
-    const f=document.createElement('div');
-    f.className='florzinha';
-    f.textContent=flores[Math.floor(Math.random()*flores.length)];
-    f.style.left=Math.random()*82+'%';
-    a.appendChild(f);setTimeout(()=>f.remove(),4000);
-  });
-
-  const frases=['Nosso amor está aquecendo...','Eu te amo muito 💘','Cada batida guarda as letras do seu nome 💖','Constante como o tempo, forte como o sol ☀️','Eu te amo como o infinito do universo ♾️','Transbordando como o oceano de amor que sinto por você 🌊'];
-  const pcts=['12%','30%','50%','68%','84%','100%'];
-  let nivel=0;
-  window.clickCoracao=function(){
-    nivel=(nivel+1)%frases.length;
-    document.getElementById('termoFrase').textContent=frases[nivel];
-    document.getElementById('termoFill').style.width=pcts[nivel];
-    const ic=document.getElementById('coracaoIcon');
-    ic.style.transform='scale(1.4)';setTimeout(()=>ic.style.transform='scale(1)',300);
-  };
-
-  const style=document.createElement('style');
-  style.textContent=`@keyframes floatUp{0%{opacity:0;transform:translateY(0) scale(0.6)}20%{opacity:1}100%{opacity:0;transform:translateY(-75vh) scale(1.2)}}@keyframes piscar{0%,100%{opacity:0.12}50%{opacity:1}}`;
-  document.head.appendChild(style);
-
-  const somRisada = new Audio('./assets/musicas/risadas.mp3');
-  somRisada.volume = 0.6;
-  document.getElementById('btnRisada').addEventListener('click',()=>{
-    somRisada.currentTime = 0;
-    somRisada.play();
-    for(let i=0;i<14;i++){
-      const r=document.createElement('div');
-      r.style.cssText=`position:fixed;font-size:1.3rem;pointer-events:none;z-index:9999;left:${Math.random()*88}vw;bottom:0;animation:floatUp 2.2s ease-out ${Math.random()*0.4}s forwards`;
-      r.textContent=['😆','😂','🤣','😄'][Math.floor(Math.random()*4)];
-      document.body.appendChild(r);setTimeout(()=>r.remove(),2800);
-    }
-  });
-
-  const lembs=['🍟 Comer as batatas antes do hambúrguer','☕ Cafézinho para fazer coco','🎶 Gosto musical abrangente','🌧️ Medinho de chuva forte','🌫️ Peidinhos e arrotos','🍫 Ser formiguinha','💤 O pijaminha da Minnie','🕯️ Você de branco arrumando seu pano de cabeça','🔪 Cozinha maravilhosamente bem','👵 Humor de velha','🔥 Ser sapequinha','🤚 Carinhos de mão','🪮 Seu jeitinho de arrumar meu cabelo','🥒 Sneveral Spleneral Plate','🏄‍♀️ Dias de praia'];
-  document.getElementById('btnLemb').addEventListener('click',()=>{
-    const out=document.getElementById('lembOutput');
-    const shuffled=[...lembs].sort(()=>Math.random()-.5).slice(0,5);
-    out.innerHTML=shuffled.map(l=>`<div style="padding:2px 0">${l}</div>`).join('');
-    out.style.opacity='1';
-  });
-
-  document.getElementById('btnCoco').addEventListener('click',()=>{
-    const somPeido = new Audio('./assets/musicas/peido.mp3');
-    somPeido.play();
-    for(let i=0;i<40;i++){
-      const c=document.createElement('div');
-      c.style.cssText=`position:fixed;z-index:9999;pointer-events:none;left:${Math.random()*100}vw;top:-40px;font-size:${Math.random()*25+14}px;transition:transform 3s linear,opacity 3s ease-out`;
-      c.textContent='💩';document.body.appendChild(c);
-      requestAnimationFrame(()=>{
-        c.style.transform=`translate(${(Math.random()-.5)*160}px,${window.innerHeight+80}px) rotate(${Math.random()*720}deg)`;
-        c.style.opacity='0';
-      });
-      setTimeout(()=>c.remove(),3100);
-    }
-  });
-
-  document.getElementById('btnLuz').addEventListener('click',()=>{
-    const a=document.getElementById('luzArea');a.innerHTML='';
-    for(let i=0;i<18;i++){
-      const l=document.createElement('div');
-      l.style.cssText=`position:absolute;width:7px;height:7px;border-radius:50%;background:gold;opacity:0;left:${Math.random()*93}%;top:${Math.random()*80}%;animation:piscar 2s ${Math.random()*2}s infinite`;
-      a.appendChild(l);
-    }
-    setTimeout(()=>{a.innerHTML=''},7000);
-  });
-}
-</script>
+            document.getElementById('btnLuz').addEventListener('click', () => {
+                const a = document.getElementById('luzArea'); a.innerHTML = '';
+                for (let i = 0; i < 18; i++) {
+                    const l = document.createElement('div');
+                    l.style.cssText = `position:absolute;width:7px;height:7px;border-radius:50%;background:gold;opacity:0;left:${Math.random() * 93}%;top:${Math.random() * 80}%;animation:piscar 2s ${Math.random() * 2}s infinite`;
+                    a.appendChild(l);
+                }
+                setTimeout(() => { a.innerHTML = '' }, 7000);
+            });
+        }
+    </script>
 </body>
+
 </html>
