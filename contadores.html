@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Contagem para o encontro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf3ee;
+    --bg-2: #f3e8e0;
+    --card: #fffdfb;
+    --ink: #4a2c2a;
+    --accent: #b85c6b;
+    --gold: #c9a05b;
+    --muted: #9c8478;
+    --ring: rgba(184, 92, 107, 0.16);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  body {
+    background: radial-gradient(circle at 50% -10%, var(--bg-2), var(--bg) 60%);
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 28px;
+    box-shadow: 0 30px 60px -25px rgba(74, 44, 42, 0.25), 0 0 0 1px rgba(201, 160, 91, 0.12);
+    padding: clamp(36px, 6vw, 56px) clamp(28px, 6vw, 64px);
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .eyebrow {
+    margin: 0;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .days {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(64px, 16vw, 118px);
+    line-height: 1;
+    margin: 10px 0 0;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .days-label {
+    margin: 2px 0 0;
+    font-size: 0.95rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 28px 0 26px;
+  }
+
+  .divider .line {
+    height: 1px;
+    width: 56px;
+    background: linear-gradient(to right, transparent, var(--gold));
+  }
+
+  .divider .line.right {
+    background: linear-gradient(to left, transparent, var(--gold));
+  }
+
+  .heart {
+    width: 22px;
+    height: 22px;
+    color: var(--accent);
+    transform-origin: center;
+    animation: bater 1.15s infinite;
+  }
+
+  @keyframes bater {
+    0%, 100% { transform: scale(1); }
+    14% { transform: scale(1.18); }
+    28% { transform: scale(0.96); }
+    42% { transform: scale(1.1); }
+    70% { transform: scale(1); }
+  }
+
+  .clock {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 56px;
+  }
+
+  .unit span {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(26px, 6vw, 34px);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .unit label {
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .colon {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(22px, 5vw, 28px);
+    color: var(--gold);
+    transform: translateY(-6px);
+  }
+
+  .date {
+    margin: 28px 0 0;
+    font-size: 0.95rem;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+
+  .finished .days,
+  .finished .days-label,
+  .finished .clock {
+    display: none;
+  }
+
+  .finished-message {
+    display: none;
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 7vw, 40px);
+    color: var(--accent);
+    margin: 6px 0 0;
+  }
+
+  .finished .finished-message {
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .heart { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <main class="card" id="card">
+    <p class="eyebrow">próximo encontro</p>
+    <div class="days" id="days">—</div>
+    <p class="days-label" id="daysLabel">dias</p>
+    <p class="finished-message">é hoje</p>
+
+    <div class="divider">
+      <span class="line"></span>
+      <svg class="heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 20s-7.5-4.7-10-9.3C0.4 7.2 2 3.8 5.4 3.2c2-0.3 3.8 0.8 4.6 2.4C10.8 4 12.6 2.9 14.6 3.2c3.4 0.6 5 4 3.4 7.5C15.5 15.3 12 20 12 20z"/>
+      </svg>
+      <span class="line right"></span>
+    </div>
+
+    <div class="clock">
+      <div class="unit"><span id="horas">00</span><label>horas</label></div>
+      <span class="colon">:</span>
+      <div class="unit"><span id="minutos">00</span><label>min</label></div>
+      <span class="colon">:</span>
+      <div class="unit"><span id="segundos">00</span><label>seg</label></div>
+    </div>
+
+    <p class="date">4 de julho de 2026</p>
+  </main>
+
+  <script>
+    const dataEncontro = new Date('2026-07-04T12:00:00-03:00');
+
+    const card = document.getElementById('card');
+    const elDias = document.getElementById('days');
+    const elDiasLabel = document.getElementById('daysLabel');
+    const elHoras = document.getElementById('horas');
+    const elMinutos = document.getElementById('minutos');
+    const elSegundos = document.getElementById('segundos');
+
+    function doisDigitos(n) {
+      return String(n).padStart(2, '0');
+    }
+
+    function atualizar() {
+      const agora = new Date();
+      const diffMs = dataEncontro - agora;
+
+      if (diffMs <= 0) {
+        card.classList.add('finished');
+        return;
+      }
+
+      const totalSeg = Math.floor(diffMs / 1000);
+      const dias = Math.floor(totalSeg / 86400);
+      const horas = Math.floor((totalSeg % 86400) / 3600);
+      const minutos = Math.floor((totalSeg % 3600) / 60);
+      const segundos = totalSeg % 60;
+
+      elDias.textContent = dias;
+      elDiasLabel.textContent = dias === 1 ? 'dia' : 'dias';
+      elHoras.textContent = doisDigitos(horas);
+      elMinutos.textContent = doisDigitos(minutos);
+      elSegundos.textContent = doisDigitos(segundos);
+    }
+
+    atualizar();
+    setInterval(atualizar, 1000);
+  </script>
+</body>
+</html>
