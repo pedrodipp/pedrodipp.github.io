@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="locked">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check-in · Hotel do Coração</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Caveat:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  /* ======================================================
+     CONFIGURAÇÃO RÁPIDA — procure "EDITE AQUI" para mudar
+     nomes, datas, textos e fotos sem mexer no resto do código.
+     ====================================================== */
+
+  :root{
+    --bg-deep:#0e1512;
+    --bg-mid:#161f1a;
+    --panel: rgba(245,237,224,0.04);
+    --brass:#c9a227;
+    --brass-soft:#e3c878;
+    --cream:#f5ede0;
+    --sub:#b9ab8f;
+    --rose:#d9a9a0;
+    --line: rgba(245,237,224,0.14);
+    --display: 'Cormorant Garamond', serif;
+    --script: 'Caveat', cursive;
+    --body: 'Inter', sans-serif;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background: var(--bg-deep);
+    color: var(--cream);
+    font-family: var(--body);
+    font-weight: 300;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* ---------- ambiente de fundo: partículas de luz quente (tipo velas) ---------- */
+  #ambient{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    background:
+      radial-gradient(ellipse at 18% 15%, rgba(201,162,39,0.10), transparent 55%),
+      radial-gradient(ellipse at 82% 75%, rgba(201,162,39,0.08), transparent 55%),
+      linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 45%, var(--bg-deep) 100%);
+  }
+  .mote{
+    position:absolute;
+    background: var(--brass-soft);
+    border-radius:50%;
+    animation: glow linear infinite;
+  }
+  @keyframes glow{
+    0%,100%{opacity:.08;}
+    50%{opacity:.55;}
+  }
+
+  section{
+    position:relative;
+    z-index:1;
+    padding: 110px 24px;
+    max-width: 860px;
+    margin: 0 auto;
+    overflow-x: hidden;
+  }
+
+  .eyebrow{
+    font-family: var(--body);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-size: 11.5px;
+    color: var(--brass-soft);
+    display:block;
+    margin-bottom: 16px;
+    text-align:center;
+  }
+
+  h1,h2,h3{
+    font-family: var(--display);
+    font-weight: 500;
+    line-height: 1.1;
+  }
+
+  .rule{
+    width: 46px;
+    height: 1px;
+    background: var(--brass);
+    margin: 0 auto 20px;
+    opacity: 0.7;
+  }
+
+  /* ---------- HERO ---------- */
+  #hero{
+    min-height: 100svh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+  .hotel-mark{
+    width: 46px; height: 46px;
+    margin-bottom: 22px;
+  }
+  #hero .greeting{
+    font-family: var(--script);
+    font-size: clamp(1.7rem, 5vw, 2.5rem);
+    color: var(--brass-soft);
+    margin-bottom: 6px;
+  }
+  #hero h1{
+    font-size: clamp(2.4rem, 6.5vw, 4.4rem);
+    font-style: italic;
+    max-width: 16ch;
+  }
+  #hero .sub{
+    margin-top: 20px;
+    color: var(--sub);
+    font-size: 14.5px;
+    letter-spacing: 0.03em;
+    max-width: 42ch;
+  }
+  .scroll-hint{
+    position:absolute;
+    bottom: 34px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:10.5px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color: var(--sub);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    animation: bob 2.4s ease-in-out infinite;
+  }
+  .scroll-hint span{
+    width:1px; height:26px;
+    background: linear-gradient(var(--sub), transparent);
+  }
+  @keyframes bob{ 0%,100%{transform:translate(-50%,0);} 50%{transform:translate(-50%,8px);} }
+
+  /* ---------- AMENIDADES ---------- */
+  #amenidades{ padding-top: 0; padding-bottom: 70px; }
+  .amenities-grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .amenity{
+    text-align:center;
+    padding: 22px 8px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel);
+  }
+  .amenity svg{ margin-bottom: 10px; }
+  .amenity-label{
+    font-size: 11px;
+    color: var(--sub);
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+  }
+
+  /* ---------- CONTADOR (status de hospedagem) ---------- */
+  #contador{ text-align:center; }
+  .counter-grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 42px;
+  }
+  .counter-item{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px 8px;
+  }
+  .counter-num{
+    font-family: var(--display);
+    font-size: clamp(1.7rem, 5vw, 2.6rem);
+    color: var(--brass-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .counter-label{
+    margin-top: 6px;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sub);
+  }
+  #contador .msg{
+    margin-top: 26px;
+    font-family: var(--script);
+    font-size: 1.35rem;
+    color: var(--cream);
+  }
+  .status-badge{
+    display:inline-block;
+    margin-top: 18px;
+    padding: 6px 16px;
+    border: 1px solid var(--brass);
+    border-radius: 999px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brass-soft);
+  }
+
+  /* ---------- HISTÓRICO DE ESTADIAS ---------- */
+  #historia h2, #galeria h2, #carta h2{
+    text-align:center;
+    font-size: clamp(1.9rem, 5vw, 2.6rem);
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  #historia .section-sub, #galeria .section-sub, #carta .section-sub{
+    text-align:center;
+    color: var(--sub);
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    margin-bottom: 56px;
+  }
+  .timeline{
+    position:relative;
+    padding-left: 32px;
+  }
+  .timeline::before{
+    content:'';
+    position:absolute;
+    left: 5px; top:6px; bottom:6px;
+    width:1px;
+    background: linear-gradient(var(--line), var(--brass), var(--line));
+    opacity:0.6;
+  }
+  .t-item{
+    position:relative;
+    padding-bottom: 48px;
+  }
+  .t-item:last-child{ padding-bottom:0; }
+  .t-item::before{
+    content:'';
+    position:absolute;
+    left: -32px; top: 4px;
+    width: 10px; height: 10px;
+    border-radius:50%;
+    background: var(--brass);
+    box-shadow: 0 0 0 4px rgba(201,162,39,0.14), 0 0 12px 2px rgba(201,162,39,0.45);
+  }
+  .t-date{
+    font-size: 11.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brass-soft);
+    margin-bottom: 6px;
+  }
+  .t-title{
+    font-family: var(--display);
+    font-size: 1.45rem;
+    margin-bottom: 6px;
+  }
+  .t-text{
+    color: var(--sub);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 52ch;
+  }
+
+  /* ---------- ÁLBUM DA SUÍTE ---------- */
+  .gallery-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .photo-slot{
+    aspect-ratio: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color: var(--sub);
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    background: var(--panel);
+    padding: 10px;
+  }
+  .photo-slot.empty{ border: 1px dashed rgba(245,237,224,0.22); }
+  .photo-slot img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  /* ---------- BILHETE DO CONCIERGE (carta) ---------- */
+  #carta{ text-align:center; }
+  .envelope-wrap{ display:flex; justify-content:center; }
+  .envelope{
+    cursor:pointer;
+    width: min(220px, 78vw);
+    aspect-ratio: 220 / 150;
+    position: relative;
+    background: linear-gradient(180deg, #1c2620, #141b16);
+    border: 1px solid var(--brass);
+    border-radius: 6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: transform .3s ease;
+    overflow:hidden;
+  }
+  .envelope:hover{ transform: translateY(-4px); }
+  .envelope::before{
+    content:'';
+    position:absolute;
+    top:0; left:0;
+    width:0; height:0;
+    border-left: 50% solid transparent;
+    border-right: 50% solid transparent;
+    border-top: 51% solid #1c2620;
+    filter: brightness(1.3);
+  }
+  .envelope::after{
+    content:'✦';
+    position:relative;
+    color: var(--brass-soft);
+    font-size: 20px;
+    top: 18px;
+  }
+  .envelope-label{
+    margin-top: 18px;
+    font-family: var(--script);
+    font-size: 1.05rem;
+    color: var(--brass-soft);
+    position:relative;
+    top: 30px;
+  }
+  .letter-paper{
+    display:none;
+    text-align:left;
+    margin-top: 46px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 42px 36px;
+  }
+  .letter-paper.open{ display:block; animation: unfold .6s ease; }
+  @keyframes unfold{ from{ opacity:0; transform: translateY(14px);} to{opacity:1; transform:translateY(0);} }
+  .letter-paper p{
+    font-family: var(--display);
+    font-size: 1.3rem;
+    line-height: 1.7;
+    color: var(--cream);
+    white-space: pre-line;
+  }
+  .letter-sign{
+    margin-top: 26px;
+    font-family: var(--script);
+    font-size: 1.5rem;
+    color: var(--brass-soft);
+    text-align:right;
+  }
+
+  footer{
+    position:relative; z-index:1;
+    text-align:center;
+    padding: 56px 24px 90px;
+    color: var(--sub);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+  }
+
+  ::selection{ background: var(--brass); color: var(--bg-deep); }
+
+  /* ======================================================
+     RESPONSIVIDADE — celular
+     ====================================================== */
+  @media (max-width: 640px){
+    section{ padding: 72px 20px; }
+    #hero{ padding-top: 24px; padding-bottom: 24px; }
+    #hero h1{ font-size: clamp(2rem, 8.5vw, 2.6rem); max-width: 13ch; }
+    #hero .greeting{ font-size: clamp(1.4rem, 6vw, 1.8rem); }
+    #hero .sub{ font-size: 13.5px; max-width: 30ch; }
+    .scroll-hint{ bottom: 20px; }
+
+    .amenities-grid{ grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .amenity{ padding: 16px 6px; }
+    .amenity svg{ width:20px; height:20px; }
+
+    .counter-grid{ grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 32px; }
+    .counter-item{ padding: 18px 6px; }
+    #contador .msg{ font-size: 1.15rem; }
+
+    #historia h2, #galeria h2, #carta h2{ margin-bottom: 6px; }
+    #historia .section-sub, #galeria .section-sub, #carta .section-sub{ margin-bottom: 40px; }
+
+    .timeline{ padding-left: 24px; }
+    .timeline::before{ left: 4px; }
+    .t-item{ padding-bottom: 38px; }
+    .t-item::before{ left: -24px; width: 9px; height: 9px; }
+    .t-title{ font-size: 1.25rem; }
+    .t-text{ font-size: 13.5px; max-width: 100%; }
+
+    .gallery-grid{ grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+    .letter-paper{ padding: 28px 20px; margin-top: 34px; }
+    .letter-paper p{ font-size: 1.1rem; line-height: 1.65; }
+    .letter-sign{ font-size: 1.3rem; }
+
+    footer{ padding: 40px 20px 68px; }
+  }
+  @media (max-width: 380px){
+    .amenities-grid{ grid-template-columns: repeat(2, 1fr); }
+    .counter-grid{ grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .counter-num{ font-size: 1.5rem; }
+    .gallery-grid{ grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .mote, .scroll-hint{ animation: none !important; }
+  }
+
+  /* ======================================================
+     TELA DE CHECK-IN — o "disfarce" antes da surpresa
+     ====================================================== */
+  html.locked, html.locked body{ overflow:hidden; height:100%; }
+
+  #checkin-gate{
+    position:fixed;
+    inset:0;
+    z-index: 999;
+    background:
+      radial-gradient(ellipse at 50% 20%, rgba(201,162,39,0.10), transparent 60%),
+      rgba(8,11,9,0.86);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 20px;
+    transition: opacity .5s ease, visibility .5s ease;
+  }
+  #checkin-gate.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+
+  .checkin-card{
+    width: 100%;
+    max-width: 380px;
+    background: linear-gradient(180deg, #171f1a, #10150f);
+    border: 1px solid rgba(201,162,39,0.35);
+    border-radius: 16px;
+    padding: 34px 30px 28px;
+    text-align:center;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  }
+  .checkin-mark{ width:34px; height:34px; margin: 0 auto 14px; }
+  .checkin-hotel{
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+  .checkin-tag{
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--brass-soft);
+    margin-bottom: 26px;
+  }
+  .checkin-field-label{
+    text-align:left;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sub);
+    margin-bottom: 8px;
+  }
+  #guest-name{
+    width:100%;
+    background: rgba(245,237,224,0.05);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 13px 14px;
+    font-family: var(--body);
+    font-size: 15px;
+    color: var(--cream);
+    outline:none;
+    margin-bottom: 22px;
+  }
+  #guest-name:focus{ border-color: var(--brass); }
+  #guest-name::placeholder{ color: rgba(185,171,143,0.55); }
+
+  .checkin-btn{
+    width:100%;
+    background: var(--brass);
+    color: #191410;
+    border:none;
+    border-radius: 8px;
+    padding: 13px 14px;
+    font-family: var(--body);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.03em;
+    cursor:pointer;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .checkin-btn:disabled{ opacity:0.4; cursor:default; }
+  .checkin-btn:not(:disabled):hover{ transform: translateY(-1px); }
+
+  .checkin-processing{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    gap: 9px;
+    margin-top: 18px;
+    font-size: 12.5px;
+    color: var(--sub);
+  }
+  .checkin-processing.show{ display:flex; }
+  .checkin-spinner{
+    width: 13px; height:13px;
+    border-radius:50%;
+    border: 2px solid rgba(201,162,39,0.25);
+    border-top-color: var(--brass);
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+
+  /* ---------- estágio 2: cartão-chave ---------- */
+  #keycard-stage{ display:none; }
+  #keycard-stage.show{ display:block; animation: unfold .5s ease; }
+
+  .keycard{
+    position:relative;
+    border: 1px solid var(--brass);
+    border-radius: 12px;
+    padding: 24px 20px;
+    background: linear-gradient(135deg, #1c2620 0%, #10150f 100%);
+    margin-bottom: 22px;
+    overflow:hidden;
+  }
+  .keycard::after{
+    content:'';
+    position:absolute;
+    top:-50%; left:-20%;
+    width:60%; height:200%;
+    background: linear-gradient(90deg, transparent, rgba(227,200,120,0.12), transparent);
+    transform: rotate(20deg);
+    animation: sheen 3.2s ease-in-out infinite;
+  }
+  @keyframes sheen{
+    0%{ transform: translateX(-60%) rotate(20deg); }
+    100%{ transform: translateX(260%) rotate(20deg); }
+  }
+  .keycard-top{
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--brass-soft);
+    margin-bottom: 14px;
+  }
+  .keycard-name{
+    font-family: var(--script);
+    font-size: 1.9rem;
+    color: var(--cream);
+    margin-bottom: 10px;
+    word-break: break-word;
+  }
+  .keycard-room{
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--brass-soft);
+  }
+  .keycard-note{
+    margin-top: 12px;
+    font-size: 11.5px;
+    color: var(--sub);
+    letter-spacing: 0.03em;
+  }
+
+</style>
+</head>
+<body>
+
+<div id="ambient"></div>
+
+<!-- ================= TELA DE CHECK-IN ================= -->
+<div id="checkin-gate">
+  <div class="checkin-card">
+
+    <div id="checkin-form">
+      <svg class="checkin-mark" viewBox="0 0 40 40" fill="none">
+        <rect x="9" y="6" width="22" height="28" rx="2" stroke="#c9a227" stroke-width="1.3"/>
+        <path d="M14 14h12M14 20h12M14 26h7" stroke="#c9a227" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+      <!-- EDITE AQUI: nome do "hotel" -->
+      <div class="checkin-hotel">Hotel do Coração</div>
+      <div class="checkin-tag">Check-in de hóspede</div>
+
+      <div class="checkin-field-label">Nome do hóspede</div>
+      <input id="guest-name" type="text" placeholder="Digite seu nome" autocomplete="off" autocapitalize="words">
+
+      <button class="checkin-btn" id="checkin-btn" disabled>Fazer check-in</button>
+      <div class="checkin-processing" id="checkin-processing">
+        <div class="checkin-spinner"></div> Confirmando sua reserva...
+      </div>
+    </div>
+
+    <div id="keycard-stage">
+      <div class="keycard">
+        <div class="keycard-top">Cartão-chave digital</div>
+        <div class="keycard-name" id="keycard-name">—</div>
+        <div class="keycard-room" id="keycard-room">Suíte —</div>
+        <div class="keycard-note">Sua suíte está pronta e preparada especialmente para você.</div>
+      </div>
+      <button class="checkin-btn" id="enter-suite-btn">Entrar na suíte</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= HERO / SUÍTE ================= -->
+<section id="hero">
+  <svg class="hotel-mark" viewBox="0 0 40 40" fill="none">
+    <rect x="9" y="6" width="22" height="28" rx="2" stroke="#c9a227" stroke-width="1"/>
+    <path d="M14 14h12M14 20h12M14 26h7" stroke="#c9a227" stroke-width="1" stroke-linecap="round"/>
+  </svg>
+  <span class="eyebrow">Hotel do Coração · Check-in confirmado</span>
+  <div class="greeting" id="hero-greeting">Bem-vinda,</div>
+  <h1>Sua suíte está pronta pra você</h1>
+  <p class="sub">Preparei cada detalhe pensando em você. Fique à vontade — essa estadia é só nossa.</p>
+  <div class="scroll-hint"><span></span>role para ver</div>
+</section>
+
+<!-- ================= AMENIDADES ================= -->
+<section id="amenidades">
+  <div class="amenities-grid">
+    <div class="amenity">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.5-9.3-9C1 7.3 2.8 4 6 4c2 0 3.5 1.2 4 2.4C10.5 5.2 12 4 14 4c3.2 0 5 3.3 3.3 7-2.3 4.5-9.3 9-9.3 9Z" stroke="#c9a227" stroke-width="1.3"/></svg>
+      <div class="amenity-label">Abraços<br>ilimitados</div>
+    </div>
+    <div class="amenity">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H7l-3 3V4Z" stroke="#c9a227" stroke-width="1.3" stroke-linejoin="round"/></svg>
+      <div class="amenity-label">Conversas até<br>tarde da noite</div>
+    </div>
+    <div class="amenity">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" stroke="#c9a227" stroke-width="1.3" stroke-linecap="round"/><circle cx="12" cy="12" r="3.4" stroke="#c9a227" stroke-width="1.3"/></svg>
+      <div class="amenity-label">Sol garantido<br>quando você chega</div>
+    </div>
+    <div class="amenity">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="#c9a227" stroke-width="1.3"/><path d="M12 7.5v5l3.2 1.9" stroke="#c9a227" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <div class="amenity-label">Saudade fora<br>de serviço</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATUS DE HÓSPEDE (contador) ================= -->
+<section id="contador">
+  <span class="eyebrow">Status de hospedagem</span>
+  <h2 style="text-align:center; font-style:italic;">Você é minha hóspede favorita há</h2>
+  <div class="counter-grid">
+    <div class="counter-item"><div class="counter-num" id="c-days">0</div><div class="counter-label">dias</div></div>
+    <div class="counter-item"><div class="counter-num" id="c-hours">0</div><div class="counter-label">horas</div></div>
+    <div class="counter-item"><div class="counter-num" id="c-min">0</div><div class="counter-label">minutos</div></div>
+    <div class="counter-item"><div class="counter-num" id="c-sec">0</div><div class="counter-label">segundos</div></div>
+  </div>
+  <div class="msg">e cada estadia valeu a pena.</div>
+  <div class="status-badge">Hóspede vitalícia · sem check-out</div>
+</section>
+
+<!-- ================= HISTÓRICO DE ESTADIAS ================= -->
+<section id="historia">
+  <h2>Seu histórico conosco</h2>
+  <div class="section-sub">Todas as vezes que você se hospedou no meu coração</div>
+  <div class="timeline" id="timeline"><!-- gerado via JS --></div>
+</section>
+
+<!-- ================= ÁLBUM DA SUÍTE ================= -->
+<section id="galeria">
+  <h2>Álbum da suíte</h2>
+  <div class="section-sub">Registros da nossa estadia favorita</div>
+  <div class="gallery-grid" id="gallery"><!-- gerado via JS --></div>
+</section>
+
+<!-- ================= BILHETE DO CONCIERGE ================= -->
+<section id="carta">
+  <h2>Um bilhete no seu travesseiro</h2>
+  <div class="section-sub">Cortesia da casa</div>
+  <div class="envelope-wrap">
+    <div class="envelope" id="envelope" onclick="abrirCarta()"></div>
+  </div>
+  <div class="envelope-label">toque para abrir</div>
+  <div class="letter-paper" id="letter">
+    <p id="letter-text"></p>
+    <div class="letter-sign" id="letter-sign"></div>
+  </div>
+</section>
+
+<footer id="footer-text"></footer>
+
+<script>
+/* ======================================================
+   EDITE AQUI — todas as informações do site em um só lugar
+   ====================================================== */
+const CONFIG = {
+  // Número da "suíte" que aparece no cartão-chave e no rodapé
+  numeroSuite: "10.10",
+
+  // Data em que vocês começaram a namorar (AAAA-MM-DDTHH:MM:SS)
+  dataInicio: "2025-10-10T00:00:00",
+
+  // Linha do tempo: adicione, remova ou edite quantos quiser
+  timeline: [
+    { data: "Agosto de 2025", titulo: "O começo", texto: "O dia em que tudo começou entre a gente, mesmo com tantos quilômetros no meio." },
+    { data: "Ao longo do caminho", titulo: "As chamadas de vídeo", texto: "Todas as ligações que viraram nossa rotina, os bom dia e boa noite que atravessaram distância." },
+    { data: "Os encontros", titulo: "Cada reencontro", texto: "Cada vez que a saudade virou abraço, mesmo que por poucos dias." },
+    { data: "04 de julho de 2026", titulo: "Você aqui, comigo", texto: "O dia em que decorei cada cantinho do quarto só de ansiedade te esperando chegar." }
+  ],
+
+  // FOTOS: coloque os arquivos numa pasta "fotos" do lado deste HTML
+  // e liste os nomes aqui. Lista vazia = espaços reservados.
+  fotos: [
+    "https://i.imgur.com/F4kd3ST.jpeg",
+    "https://i.imgur.com/ji8kGwR.jpeg",
+    "https://i.imgur.com/PU9XExt.jpeg",
+    "https://i.imgur.com/fQTExnh.jpeg",
+    "https://i.imgur.com/GYx6ToA.jpeg",
+    "https://i.imgur.com/TdFR7Ut.jpeg"
+  ],
+  quantidadeFotos: 6,
+
+  // Texto da carta
+  cartaTexto: `Meu bem,
+
+Primeiramente seja bem-vinda a sua estadia no meu mundinho, mas dessa vez não só pela tela.
+
+Cada quilômetro que a gente atravessou até hoje valeu a pena. Cada viagem, cada estadia, cada jantar e cada café da manhã de despedida é o reforço de que o amor não tem distância.
+
+E finalmente depois de tanto contar os dias, estamos juntos novamente!
+
+Eu te amo, mesmo de longe. Ainda mais de perto.`,
+  cartaAssinatura: "— seu maridão"
+};
+
+/* ---------- partículas de luz ambiente ---------- */
+(function gerarMotes(){
+  const field = document.getElementById('ambient');
+  const total = 60;
+  for(let i=0;i<total;i++){
+    const s = document.createElement('div');
+    s.className = 'mote';
+    const size = Math.random()*2.4 + 0.8;
+    s.style.width = size+'px';
+    s.style.height = size+'px';
+    s.style.top = Math.random()*100+'%';
+    s.style.left = Math.random()*100+'%';
+    s.style.animationDuration = (Math.random()*4+3)+'s';
+    s.style.animationDelay = (Math.random()*4)+'s';
+    field.appendChild(s);
+  }
+})();
+
+/* ---------- contador ---------- */
+function atualizarContador(){
+  const inicio = new Date(CONFIG.dataInicio).getTime();
+  const agora = new Date().getTime();
+  let diff = Math.max(0, agora - inicio);
+  const dias = Math.floor(diff/(1000*60*60*24));
+  const horas = Math.floor((diff/(1000*60*60))%24);
+  const min = Math.floor((diff/(1000*60))%60);
+  const sec = Math.floor((diff/1000)%60);
+  document.getElementById('c-days').textContent = dias;
+  document.getElementById('c-hours').textContent = String(horas).padStart(2,'0');
+  document.getElementById('c-min').textContent = String(min).padStart(2,'0');
+  document.getElementById('c-sec').textContent = String(sec).padStart(2,'0');
+}
+atualizarContador();
+setInterval(atualizarContador, 1000);
+
+/* ---------- linha do tempo ---------- */
+(function montarTimeline(){
+  const el = document.getElementById('timeline');
+  CONFIG.timeline.forEach(item=>{
+    const div = document.createElement('div');
+    div.className = 't-item';
+    div.innerHTML = `
+      <div class="t-date">${item.data}</div>
+      <div class="t-title">${item.titulo}</div>
+      <div class="t-text">${item.texto}</div>
+    `;
+    el.appendChild(div);
+  });
+})();
+
+/* ---------- galeria ---------- */
+(function montarGaleria(){
+  const el = document.getElementById('gallery');
+  if(CONFIG.fotos && CONFIG.fotos.length > 0){
+    CONFIG.fotos.forEach(caminho => {
+      const div = document.createElement('div');
+      div.className = 'photo-slot';
+      const img = document.createElement('img');
+      img.src = caminho;
+      img.alt = 'Foto do casal';
+      img.loading = 'lazy';
+      div.appendChild(img);
+      el.appendChild(div);
+    });
+  } else {
+    for(let i=0;i<CONFIG.quantidadeFotos;i++){
+      const div = document.createElement('div');
+      div.className = 'photo-slot empty';
+      div.innerHTML = '<span>foto nossa aqui<br>✦</span>';
+      el.appendChild(div);
+    }
+  }
+})();
+
+/* ---------- carta ---------- */
+document.getElementById('letter-text').textContent = CONFIG.cartaTexto;
+document.getElementById('letter-sign').textContent = CONFIG.cartaAssinatura;
+function abrirCarta(){
+  const letter = document.getElementById('letter');
+  const envelope = document.getElementById('envelope');
+  letter.classList.add('open');
+  envelope.style.opacity = '0.5';
+  letter.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* ---------- rodapé ---------- */
+document.getElementById('footer-text').textContent =
+  'Hotel do Coração · Suíte ' + CONFIG.numeroSuite + ' · volte sempre que quiser';
+
+/* ---------- check-in ---------- */
+(function checkinGate(){
+  const gate = document.getElementById('checkin-gate');
+  const nameInput = document.getElementById('guest-name');
+  const checkinBtn = document.getElementById('checkin-btn');
+  const processing = document.getElementById('checkin-processing');
+  const formStage = document.getElementById('checkin-form');
+  const keycardStage = document.getElementById('keycard-stage');
+  const keycardName = document.getElementById('keycard-name');
+  const keycardRoom = document.getElementById('keycard-room');
+  const enterBtn = document.getElementById('enter-suite-btn');
+  const heroGreeting = document.getElementById('hero-greeting');
+
+  keycardRoom.textContent = 'Suíte ' + CONFIG.numeroSuite;
+
+  nameInput.addEventListener('input', () => {
+    checkinBtn.disabled = nameInput.value.trim().length === 0;
+  });
+
+  nameInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' && !checkinBtn.disabled){
+      checkinBtn.click();
+    }
+  });
+
+  checkinBtn.addEventListener('click', () => {
+    if(checkinBtn.disabled) return;
+    const nome = nameInput.value.trim() || 'querida hóspede';
+    checkinBtn.disabled = true;
+    processing.classList.add('show');
+
+    setTimeout(() => {
+      formStage.style.display = 'none';
+      processing.classList.remove('show');
+      keycardName.textContent = nome;
+      heroGreeting.textContent = 'Bem-vinda, ' + nome + '.';
+      keycardStage.classList.add('show');
+    }, 1400);
+  });
+
+  enterBtn.addEventListener('click', () => {
+    gate.classList.add('hidden');
+    document.documentElement.classList.remove('locked');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  });
+
+  window.addEventListener('load', () => nameInput.focus());
+})();
+</script>
+
+</body>
+</html>
