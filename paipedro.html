@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pai Pedro de Oxóssi — Sacerdote</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --night: #150F0C;
+            --ember: #2B1B12;
+            --ember-deep: #201409;
+            --candle: #7FAE68;
+            --candle-soft: rgba(127, 174, 104, 0.45);
+            --paper: #F1E6D3;
+            --smoke: #C9B79C;
+            --text-main: #F1E6D3;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(ellipse 700px 500px at 50% 0%, rgba(127, 174, 104, 0.16), transparent 70%),
+                radial-gradient(ellipse 900px 700px at 50% 100%, rgba(0, 0, 0, 0.55), transparent 60%),
+                var(--night);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px;
+            font-family: 'EB Garamond', serif;
+            color: var(--text-main);
+        }
+
+        .card {
+            width: 100%;
+            max-width: 480px;
+            background:
+                radial-gradient(ellipse 400px 200px at 50% -10%, rgba(227, 168, 87, 0.10), transparent 65%),
+                linear-gradient(180deg, var(--ember) 0%, var(--ember-deep) 100%);
+            border: 1px solid rgba(127, 174, 104, 0.30);
+            border-radius: 18px;
+            padding: 48px 40px 36px;
+            position: relative;
+            text-align: center;
+            box-shadow:
+                0 0 0 1px rgba(0, 0, 0, 0.3),
+                0 30px 60px -20px rgba(0, 0, 0, 0.6),
+                0 0 80px -20px rgba(127, 174, 104, 0.14);
+        }
+
+        /* fio dourado no topo, como o traço de um ponto riscado */
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -1px);
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--candle), transparent);
+            opacity: 0.8;
+        }
+
+        .photo-wrap {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 22px;
+        }
+
+        .glow {
+            position: absolute;
+            inset: -26px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--candle-soft), transparent 70%);
+            filter: blur(4px);
+            animation: flicker 3.4s ease-in-out infinite;
+        }
+
+        @keyframes flicker {
+
+            0%,
+            100% {
+                opacity: 0.55;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.85;
+                transform: scale(1.04);
+            }
+        }
+
+        .ring-svg {
+            position: absolute;
+            inset: -14px;
+            width: calc(100% + 28px);
+            height: calc(100% + 28px);
+            animation: spin 70s linear infinite;
+            overflow: visible;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .ring-svg {
+                animation: none;
+            }
+
+            .glow {
+                animation: none;
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--paper);
+            background: #33422E;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 50% 20%;
+            display: block;
+        }
+
+        .commit {
+            font-family: 'EB Garamond', serif;
+            font-style: italic;
+            font-size: 13px;
+            color: var(--smoke);
+            letter-spacing: 0.02em;
+            margin-bottom: 28px;
+        }
+
+        .commit span {
+            color: var(--candle);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            font-weight: 600;
+            margin: 0 0 8px;
+            letter-spacing: 0.01em;
+            color: var(--paper);
+        }
+
+        .role {
+            font-size: 13px;
+            color: var(--candle);
+            font-family: 'Cinzel', serif;
+            margin: 0 0 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        p.bio {
+            font-family: 'EB Garamond', serif;
+            font-size: 17px;
+            line-height: 1.65;
+            color: var(--smoke);
+            margin: 0 0 30px;
+            text-align: left;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'EB Garamond', serif;
+            font-style: italic;
+            font-size: 15px;
+            color: var(--paper);
+            background: rgba(127, 174, 104, 0.10);
+            border: 1px solid rgba(127, 174, 104, 0.35);
+            padding: 8px 16px;
+            border-radius: 999px;
+            margin-bottom: 30px;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--candle);
+            box-shadow: 0 0 8px 1px var(--candle-soft);
+            animation: pulse 1.6s ease-in-out infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .dot {
+                animation: none;
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-family: 'EB Garamond', serif;
+            font-size: 16px;
+            flex-wrap: wrap;
+        }
+
+        .links a {
+            color: var(--smoke);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .links a:hover,
+        .links a:focus-visible {
+            color: var(--candle);
+            border-color: var(--candle);
+        }
+
+        .links a:focus-visible {
+            outline: 2px solid var(--candle);
+            outline-offset: 3px;
+        }
+
+        footer {
+            margin-top: 28px;
+            font-family: 'EB Garamond', serif;
+            font-style: italic;
+            font-size: 13px;
+            color: rgba(201, 183, 156, 0.55);
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="card">
+
+        <div class="photo-wrap">
+            <div class="glow"></div>
+            <svg class="ring-svg" viewBox="0 0 228 228">
+                <circle cx="114" cy="114" r="106" fill="none" style="stroke: var(--candle)" stroke-width="4"
+                    stroke-linecap="round" stroke-dasharray="18 22" />
+                <circle cx="114" cy="114" r="106" fill="none" style="stroke: var(--paper)" stroke-width="4"
+                    stroke-linecap="round" stroke-dasharray="8 32" stroke-dashoffset="-25" opacity="0.85" />
+            </svg>
+            <div class="photo">
+                <img src="paipedro.png" alt="Foto Pai Pedro de Oxóssi">
+            </div>
+        </div>
+
+        <p class="commit"><span>&gt;</span> terreiro: Casa dos Reinos da Terra — status <span>atendimentos
+                abertos</span></p>
+
+        <h1>Pai Pedro de Oxóssi</h1>
+        <p class="role">Pai de Santo &middot; Sacerdote de Umbanda</p>
+
+        <p class="bio">
+            Meu nome é Pedro e juntamente com o Caboclo Guaracy e o Exu João Caveira fundei a Casa dos Reinos da Terra.
+            Nossa missão é oferecer acolhimento, orientação espiritual e conexão com a ancestralidade através da Umbanda. 
+        </p>
+
+        <div class="status">
+            <span class="dot"></span>
+            site em construção
+        </div>
+
+        <div class="links">
+            <a href="https://www.instagram.com/casadosreinosdaterra/" target="_blank" rel="noopener">instagram</a>
+        </div>
+
+        <footer>pedrodipp.dev/paipedro</footer>
+    </main>
+
+</body>
+
+</html>
